@@ -1,0 +1,38 @@
+from collections import deque
+
+n, m = map(int, input().split())
+graph = [list(map(int, input())) for _ in range(n)]
+visited = [[[0]*2 for _ in range(m)] for _ in range(n)]
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1] #좌우상하
+def Bfs(x, y, z, graph, visited) :
+ef Bfs(x, y, z, graph, visited) :
+  queue = deque()
+  queue.append((x, y, z))
+  visited[y][x][z] == 1
+
+  while queue :
+  # z = 0 -> 벽 부시기 가능
+  # z = 1 -> 벽 부시기 불가능
+    bx, by, bz = queue.popleft()
+    if bx == m-1 and by == n-1 :
+      return visited[by][bx][bz] + 1
+    for i in range(len(dx)) :
+      nx = bx + dx[i]
+      ny = by + dy[i]
+    #불가능한 지점 패스
+      if nx < 0 or ny < 0 or nx > m-1 or ny > n-1 :
+        continue
+    #벽 없는곳 지나가기
+      if graph[ny][nx] == 0 and visited[ny][nx][bz] == 0 :
+        queue.append((nx, ny, bz))
+        visited[ny][nx][bz] = visited[by][bx][bz] + 1
+    #벽 있는곳 지나가기
+      if graph[ny][nx] == 1 and bz == 0 :
+        queue.append((nx, ny, bz+1))
+        visited[ny][nx][bz+1] = visited[by][bx][bz] + 1
+
+  return -1
+
+print(Bfs(0, 0, 0, graph, visited))
