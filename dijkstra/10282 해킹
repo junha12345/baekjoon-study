@@ -1,0 +1,41 @@
+import sys
+import heapq
+input = sys.stdin.readline
+
+def dijkstra(start) :
+    q = []
+    time[start] = 0
+    visited[start] = 1
+    heapq.heappush(q, (time[start], start))
+    while q :
+        dist, node = heapq.heappop(q)
+        if time[node] < dist :
+            continue
+        for i in graph[node] :
+            cost = time[node] + i[1]
+            if cost < time[i[0]] :
+                time[i[0]] = cost
+                heapq.heappush(q, (cost, i[0]))
+                visited[i[0]] = 1
+    cnt = time.count(INF)
+    for _ in range(cnt) :
+        time.remove(INF)
+    return
+        
+t = int(input())
+sol = []
+INF = int(1e9)
+for _ in range(t) :
+    n, m, start = map(int, input().split())
+    graph = [[] for _ in range(n+1)]
+    time = [INF] * (n+1)
+    visited = [0] * (n+1)
+    for _ in range(m) :
+        a, b, c = map(int, input().split())
+        graph[b].append([a, c])
+    dijkstra(start)
+    count = visited.count(1)
+    sol.append([count, max(time)])
+
+for i in range(len(sol)) :
+    print(sol[i][0], sol[i][1])
