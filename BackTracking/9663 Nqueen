@@ -1,0 +1,25 @@
+# 아이디어 = 퀸이 위치한 x 좌표, y 좌표 , 대각선 = y-dy / x-dx 가 같은지 확인
+n = int(input())
+visited = [0] * n # visited[x] = y -> x, y에 퀸을 놓는경우
+
+def poss(x) :
+    for i in range(x) :
+        if visited[x] == visited[i] or abs(visited[x] - visited[i]) == abs(x - i) :
+            return False
+    return True
+
+def nqueen(x) :
+    global cnt
+    if x == n :
+        cnt += 1
+        return
+    for i in range(n) :
+        visited[x] = i
+        if poss(x) :
+            nqueen(x+1)
+
+cnt = 0
+nqueen(0)
+print(cnt)
+
+#백트레킹을 위한 준비가 더 필요함..
