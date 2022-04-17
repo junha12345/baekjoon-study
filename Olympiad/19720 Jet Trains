@@ -2,30 +2,30 @@ import sys
 input = sys.stdin.readline
 
 n, m, k = map(int, input().split()) # n = 도시수, m = 우호도시수, k = 경로수
-road = [[0] for _ in range(n+1)]
-friend = [[0] for _ in range(n+1)]
+road = [0 for _ in range(n+1)]
+friend = [0 for _ in range(n+1)]
 
 for _ in range(m) :
     a, b = map(int, input().split())
-    friend[a][0] += (1 << b)
-    friend[b][0] += (1 << a)
+    friend[a] += (1 << b)
+    friend[b] += (1 << a)
 for _ in range(k) :
     a, b = map(int, input().split())
-    road[a][0] += (1 << b)
-    road[b][0] += (1 << a)
+    road[a] += (1 << b)
+    road[b] += (1 << a)
 
 def check(x) :
     cnt = 0
-    sol = road[x][0]&friend[x][0]
+    sol = road[x]&friend[x]
     while sol != 0 :
         if sol&1 :
             cnt += 1
-        1 >> sol
+        sol >>= 1
     return cnt
 
 q = int(input()) # q = request
 rq = []
-for i in range(q) :
+for _ in range(q) :
     rq.append(input().split())
 for j in range(q) :
     if rq[j][0] == '?' :
@@ -33,9 +33,9 @@ for j in range(q) :
         print(check(a))
     elif rq[j][0] == 'F' :
         a, b = list(map(int, rq[j][1:]))
-        friend[a][0] += (1 << b)
-        friend[b][0] += (1 << a)
+        friend[a] += (1 << b)
+        friend[b] += (1 << a)
     else :
         a, b = list(map(int, rq[j][1:]))
-        road[a][0] += (1 << b)
-        road[b][0] += (1 << a)
+        road[a] += (1 << b)
+        road[b] += (1 << a)
