@@ -1,27 +1,30 @@
 import sys
 input = sys.stdin.readline
 
+def find_parent(parent, x) :
+    if parent[x] != x:
+        return find_parent(parent, parent[x])
+    return x
+
+def union_parent(parent, a, b):
+    a = find_parent(parent, a)
+    b = find_parent(parent, b)
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
 n, m, k = map(int, input().split()) # n = 도시수, m = 우호도시수, k = 경로수
-road = [0 for _ in range(n+1)]
-friend = [0 for _ in range(n+1)]
+friend = [[] for _ in range(n+1)]
+parent = [0] * (n+1) # 집합 초기화
 
 for _ in range(m) :
     a, b = map(int, input().split())
-    friend[a] += (1 << b)
-    friend[b] += (1 << a)
+    friend[a].append(b)
+    friend[b].append(a)
 for _ in range(k) :
     a, b = map(int, input().split())
-    road[a] += (1 << b)
-    road[b] += (1 << a)
-
-def check(x) :
-    cnt = 0
-    sol = road[x]&friend[x]
-    while sol != 0 :
-        if sol&1 :
-            cnt += 1
-        sol >>= 1
-    return cnt
+    union_parent(parent, a, b)
 
 q = int(input()) # q = request
 rq = []
@@ -29,13 +32,16 @@ for _ in range(q) :
     rq.append(input().split())
 for j in range(q) :
     if rq[j][0] == '?' :
-        a = int(rq[j][1])
-        print(check(a))
+        a = int(rq[j][1]) # a = 축제도시
+        cnt = 0
+        for i in friend[a] : # i = 축제도시의 친구도시
+            if parent[a] == parent[i] : # 축제도시 집합 == 친구도시 집합
+                cnt += 1
+        print(cnt)
     elif rq[j][0] == 'F' :
         a, b = list(map(int, rq[j][1:]))
-        friend[a] += (1 << b)
-        friend[b] += (1 << a)
+        friend[a].append(b)
+        friend[b].append(a)
     else :
         a, b = list(map(int, rq[j][1:]))
-        road[a] += (1 << b)
-        road[b] += (1 << a)
+        union_parent(parent, a, b)
