@@ -1,10 +1,10 @@
 import sys
 input = sys.stdin.readline
 
-def find_parent(parent, x) :
+def find_parent(parent, x):
     if parent[x] != x:
-        return find_parent(parent, parent[x])
-    return x
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
 
 def union_parent(parent, a, b):
     a = find_parent(parent, a)
@@ -15,8 +15,10 @@ def union_parent(parent, a, b):
         parent[a] = b
 
 n, m, k = map(int, input().split()) # n = 도시수, m = 우호도시수, k = 경로수
-friend = [[] for _ in range(n+1)]
+friend = [[]*(n+1)]
 parent = [0] * (n+1) # 집합 초기화
+for i in range(1, n+1):
+    parent[i] = i
 
 for _ in range(m) :
     a, b = map(int, input().split())
@@ -27,21 +29,20 @@ for _ in range(k) :
     union_parent(parent, a, b)
 
 q = int(input()) # q = request
-rq = []
+sol = []
 for _ in range(q) :
-    rq.append(input().split())
-for j in range(q) :
-    if rq[j][0] == '?' :
-        a = int(rq[j][1]) # a = 축제도시
+    rq = list(map(str, input().split()))
+    if rq[0] == '?' :
+        a = int(rq[1]) # a = 축제도시
         cnt = 0
         for i in friend[a] : # i = 축제도시의 친구도시
-            if parent[a] == parent[i] : # 축제도시 집합 == 친구도시 집합
-                cnt += 1
+            if find_parent(parent, a) == find_parent(parent, i) : # 축제도시 집합 == 친구도시 집합
+                cnt += 1 ### 이 윗부분은 집합을 사용해야함, 부모의 노드는 다를수 있다.!!!!
         print(cnt)
-    elif rq[j][0] == 'F' :
-        a, b = list(map(int, rq[j][1:]))
+    elif rq[0] == 'F' :
+        a, b = list(map(int, rq[1:]))
         friend[a].append(b)
         friend[b].append(a)
-    else :
-        a, b = list(map(int, rq[j][1:]))
+    elif :
+        a, b = list(map(int, rq[1:]))
         union_parent(parent, a, b)
