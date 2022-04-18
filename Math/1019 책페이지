@@ -1,0 +1,39 @@
+from collections import deque
+from copy import copy
+n = int(input())
+dp = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0] for _ in range(11)]
+cnt = 1 # cnt = 자릿수, num = 수, i = 앞자리수
+
+while n >= 10**(cnt-1) : # 자릿수마다 숫자 ex) cnt = 1 -> 1~9 // cnt = 2 -> 1~99
+    if cnt > 1 :
+        for i in range(0, 10) :
+            dp[cnt][i] += 10**(cnt-1)
+            dp[cnt] = [dp[cnt][j] + dp[cnt-1][j] for j in range(10)] #리스트 숫자합
+        dp[cnt][0] -= 1
+    else :
+        for i in range(1, 10) :
+            dp[cnt][i] += 1
+    cnt += 1
+
+num = copy(n)
+q = []
+q = deque()
+while num > 0 :
+    q.append(num%10)
+    num //= 10
+q.reverse()
+sol = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+while q :
+    a = len(q)
+    c = 10**(a-1)
+    b = q.popleft()
+    sol = [dp[a-1][i]*b + sol[i] for i in range(10)]
+    for i in range(1, b) :
+        sol[i] += 10**(a-1)
+    sol[b] += (n%c)+1
+
+for i in range(len(sol)) : #  답
+    print(sol[i] ,end = ' ')
+print() 
+####################0갯수 판단불가
