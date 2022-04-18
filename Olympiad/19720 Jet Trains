@@ -43,6 +43,6 @@ for _ in range(q) :
         a, b = list(map(int, rq[1:]))
         friend[a].append(b)
         friend[b].append(a)
-    elif :
+    else :
         a, b = list(map(int, rq[1:]))
         union_parent(parent, a, b)
