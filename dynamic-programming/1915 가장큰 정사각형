@@ -1,0 +1,20 @@
+import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+visited = [[0]*m for _ in range(n)]
+dp = [[0]*m for _ in range(n)]
+graph = []
+
+for i in range(n) :
+    graph.append(list(map(int, list(input().rstrip()))))
+
+for i in range(0, n) :
+    for j in range(0, m) :
+        if graph[i][j] != 0 :
+            if 1<=i and 1<=j :
+                dp[i][j] = min(dp[i][j-1], dp[i-1][j-1], dp[i-1][j]) + 1
+            else :
+                dp[i][j] = graph[i][j]
+
+print(max(map(max, dp))**2)
