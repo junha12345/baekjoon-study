@@ -1,0 +1,33 @@
+n, m = map(int, input().split()) # n = 가로, m = 세로
+if n>=m :
+    a = n
+    b = m
+else :
+    a = m
+    b = n
+#항상 a>=b
+dp = [[0]*101 for _ in range(10001)]
+dp[1][1] = 1
+dp[2][1] = 2
+dp[2][2] = 1
+for i in range(3, a+1) :
+    j = 1
+    while j<=i :
+        if i%2 == 0 and i-j == 1 : #예외구간
+            tmp = i//2
+            dp[i][j] = min(dp[j][1]+1, dp[i][tmp]+dp[i][tmp-1])
+        elif j%2 == 0 and i-j == 1 :
+            tmp = j//2
+            dp[i][j] = min(dp[j][1]+1, dp[j][tmp]+dp[j][tmp+1])
+        elif i == j :
+            dp[i][j] = 1
+        elif j == 1 :
+            dp[i][j] = i
+        else :
+            tmp = i-j
+            if j>=tmp :
+                dp[i][j] = dp[j][tmp] + 1
+            else :
+                dp[i][j] = dp[tmp][j] + 1
+        j += 1
+print(dp[a][b])
