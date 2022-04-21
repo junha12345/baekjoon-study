@@ -6,13 +6,13 @@ else :
     a = m
     b = n
 #항상 a>=b
-dp = [[0]*101 for _ in range(10001)]
+dp = [[0]*101 for _ in range(a+3)]
 dp[1][1] = 1
 dp[2][1] = 2
 dp[2][2] = 1
 for i in range(3, a+1) :
     j = 1
-    while j<=i :
+    while j<=i and j<=100 :
         if i%2 == 0 and i-j == 1 : #예외구간
             tmp = i//2
             dp[i][j] = min(dp[j][1]+1, dp[i][tmp]+dp[i][tmp-1])
