@@ -1,0 +1,21 @@
+n = int(input())
+nlist = list(map(int, input().split()))
+for i in nlist :
+    if i == 1 :
+        ans = 0
+    else :
+        ans = 1
+        break
+if ans == 1 :
+    s = 0
+    for i in range(0, len(nlist)) :
+        s ^= nlist[i]
+    if s != 0 :
+        print("koosaga")
+    else :
+        print("cubelover")
+else :
+    if len(nlist)%2 == 0 :
+        print("koosaga")
+    else :
+        print("cubelover")
