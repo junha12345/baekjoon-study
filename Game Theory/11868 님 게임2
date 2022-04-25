@@ -1,0 +1,21 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(int, input().split()))
+nsum = [0 for _ in range(36)]
+# 각 자릿수의 합이 짝수일경우 후공이 승리
+ans = 0
+for i in nlist :
+    k = bin(i)
+    l = len(k)-2
+    for j in range(0, l) :
+        nsum[j] += int(k[l+1-j])
+for i in nsum :
+    if i%2 != 0 :
+        ans = 1
+        break
+if ans == 0 :
+    print("cubelover")
+else :
+    print("koosaga")
