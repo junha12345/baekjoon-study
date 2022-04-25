@@ -1,0 +1,35 @@
+import sys
+from collections import deque
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+t = int(input())
+def dfs(x, c) : # 현재 정점
+    global ans
+    color[x] = c
+    for i in graph[x] :
+        if color[i] == 0 :
+            dfs(i, -c)
+        else :
+            if color[x] == color[i] :
+                ans = 1
+                return
+
+sol = []
+for _ in range(t) :
+    ans = 0
+    v, e = map(int, input().split())
+    color = [0]*(v+1)
+    graph = [[] for _ in range(v+1)]
+    for _ in range(e) :
+        a, b = map(int, input().split())
+        graph[a].append(b)
+        graph[b].append(a)
+    for i in range(1,v+1) :
+        if color[i] == 0 :
+            dfs(i, 1)
+    if ans == 0 :
+        sol.append("YES")
+    else :
+        sol.append("NO")
+for i in range(t) :
+    print(sol[i])
