@@ -1,0 +1,12 @@
+n = int(input())
+nlist = list(map(int, input().split()))
+if n==1 and nlist[0] == 1 :
+    print("cubelover")
+else :
+    s = 0
+    for i in range(1, len(nlist)) :
+        s ^= bin(nlist[i])
+    if s != 0 :
+        print("koosaga")
+    else :
+        print("cubelover")
