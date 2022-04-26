@@ -1,0 +1,26 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(int, input().split()))
+fib = [1, 1] #피보나치 수열
+gn = [0] #0 약 30만까지 그런디수
+#idea = 그란디수를 구한 후 각각 xor
+i = 0
+while max(fib) <= 3*(10**6) :
+    fib.append(fib[i]+fib[i+1])
+    i+=1
+
+def find_gn(x) :
+    ans = []
+    for i in fib[1:] :
+        if x-i >= 0 :
+            ans.append(gn[x-i])
+    for i in range(0,x) :
+        if i not in ans :
+            gn.append(i)
+            break
+
+for i in range(1,10) :
+    find_gn(i)
+print(gn)
