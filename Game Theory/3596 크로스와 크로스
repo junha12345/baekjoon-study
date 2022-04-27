@@ -2,11 +2,32 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-gn = [0, 1, 1]
-n = []
-for i in range(3, n+1) :
-    if i%2 == 0:
-        for j in range(n//2+1) :
-            n.append[gn[]]
+gn = [0, 1, 1, 1]
+for i in range(4, n+1) : # i = 길이
+    nlist = []
+    if i%2 == 0 :
+        for j in range(i//2) :
+            if j-2>0 :
+                s = 0
+                s ^= gn[i-(j+3)]
+                s ^= gn[j-2]
+                nlist.append(s)
+            else :
+                nlist.append(gn[i-(j+3)])
     else :
-        for j in range(n//2+2) :
+        for j in range((i//2)+1) :
+            if j-2>0 :
+                s = 0
+                s ^= gn[i-(j+3)]
+                s ^= gn[j-2]
+                nlist.append(s)
+            else :
+                nlist.append(gn[i-(j+3)])
+    for j in range(len(nlist)+1) :
+        if j not in nlist :
+            gn.append(j)
+            break
+if gn[n] != 0 :
+    print(1)
+else :
+    print(2)
