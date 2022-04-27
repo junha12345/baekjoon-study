@@ -1,0 +1,14 @@
+import sys
+input = sys.stdin.readline
+n, p, k = map(int, input().split())
+a = list(map(int, input().split()))
+cnt = 0
+for i in range(n) :
+    n1 = a[i]
+    for n2 in a[i+1:] :
+        if (n1**2+n1*n2+n2**2)%p == k :
+            cnt += 1
+    if cnt > 0 :
+        break
+ans = ((cnt+1)*cnt)//2
+print(ans)
