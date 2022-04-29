@@ -1,0 +1,10 @@
+n = int(input())
+fib = [1, 2]
+while fib[-1]<10**15 : fib.append(fib[-2]+fib[-1])
+if n in fib :
+    print(n)
+else :
+    for i in range(1, len(fib)+1) :
+        if n in fib : break
+        if n>fib[-i] : n -= fib[-i]
+    print(n)
