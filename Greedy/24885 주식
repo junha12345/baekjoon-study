@@ -3,27 +3,20 @@ input = sys.stdin.readline
 
 n, m, k = map(int, input().split())
 price = list(map(int, input().split()))
-day = []
 dp = []
-for i in range(1, n) :
-    if price[i] > price[i-1] :
-        day.append(i-1)
-if min(price) <= m*(k+1) :
-    if len(day) != 0 :
-        for i in day :
-            pm = m*k
-            m += pm
-            m = (m//price[i])*price[i+1]+m%price[i]-pm
-        for j in range(i+1,n-1) :
-            if m*(k+1)-(price[j]-price[j+1])*((m*(k+1))//price[j]) > m :
-                dp.append(m*(k+1)-(price[j]-price[j+1])*(m*(k+1)//price[j]))
-        if len(dp) == 0 :
-            m += pm
-        else :
-            m = max(dp)
-    else :
-        for j in range(0,n-1) :
-            if m*(k+1)-(price[j]-price[j+1])*((m*(k+1))//price[j]) > m :
-                dp.append(m*(k+1)-(price[j]-price[j+1])*(m*(k+1)//price[j]))
-        m = max(dp)
+pm = 0
+day = 0
+for i in range(1,n) :
+    if price[i-1]<price[i] and m*(k+1)>=price[i-1] :
+        pm = m*k # pm = 대출금
+        m += pm
+        m = (m//price[i-1])*price[i]+m%price[i-1]-pm
+        day = i # 마지막 위치 저장
+for j in range(day,n-1) :
+    if m*(k+1)>=price[j] and m*(k+1)-(price[j]-price[j+1])*((m*(k+1))//price[j]) > m :
+        dp.append(m*(k+1)-(price[j]-price[j+1])*(m*(k+1)//price[j]))
+if len(dp) != 0 :
+    m = max(dp)
+else :
+    m += pm
 print(m)
