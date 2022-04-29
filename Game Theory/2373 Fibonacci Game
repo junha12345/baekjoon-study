@@ -1,0 +1,25 @@
+import sys
+input = sys.stdin.readline
+
+# idea = 구슬갯수 = 피보나치수 = LOSE
+# 구슬갯수 = not 피보나치수 = win // case -> 그 사이수는 max피보나치만큼 뺀값
+n = int(input())
+fib = [1, 1]
+dp = [-1, -1, -1] # dp[n] -> 구슬갯수 n일때 가져가야하는 구슬 수
+i = 0
+fnum = 0
+ffnum = 0
+while max(fib) <= 1000000 :
+    fib.append(fib[i]+fib[i+1])
+    i += 1
+for i in range(3, n+1) :
+    if i in fib :
+        dp.append(-1)
+        fnum = i
+        ffnum = 0
+    else :
+        if (i-fnum) not in fib :
+            dp.append(dp[i-fnum])
+        else :
+            dp.append(i-fnum)
+print(dp[n])
