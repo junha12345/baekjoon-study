@@ -1,0 +1,26 @@
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+
+n, m = map(int, input().split())
+graph = [[] for _ in range(1001)]
+for _ in range(n-1) :
+    a, b, d = map(int, input().split())
+    graph[a].append([b, d])
+    graph[b].append([a, d])
+
+def dfs(start, d) :
+    if start == e :
+        print(d)
+        return
+    visited[start] = 1
+    for i in graph[start] :
+        if visited[i[0]] == 0 :
+            visited[i[0]] = 1
+            dfs(i[0], d+i[1])
+    return
+
+for _ in range(m) :
+    visited = [0]*1001
+    s, e = map(int, input().split())
+    dfs(s, 0)
