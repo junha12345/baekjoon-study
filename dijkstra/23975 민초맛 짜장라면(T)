@@ -3,8 +3,8 @@ import heapq
 input = sys.stdin.readline
 INF = int(2e9)
 n,m,k = map(int, input().split())
-nlist = list(map(int, input().split()))
-nlist.insert(0,0)
+nlist = [0]
+nlist.extend(map(int, input().split()))
 graph = [[] for _ in range(n+1)]
 for _ in range(m) :
     a, b, d = map(int, input().split())
@@ -16,7 +16,7 @@ dlist = [[INF, -1] for _ in range(n+1)]
 def dijkstra() :
     q = []
     dlist[1] = [0, 0]
-    heapq.heappush(q, [0, 1])
+    heapq.heappush(q, (0, 1))
     while q :
         dist, node = heapq.heappop(q)
         if dlist[node][0] < dist : continue
@@ -24,7 +24,7 @@ def dijkstra() :
             cost = dlist[node][0] + i[1]
             if cost <= dlist[i[0]][0] :
                 dlist[i[0]] = [cost, max(node, dlist[i[0]][1])]
-                heapq.heappush(q, [cost, i[0]])
+                heapq.heappush(q, (cost, i[0]))
 dijkstra()
 for path in ends :
     ans = 0
