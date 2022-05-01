@@ -19,7 +19,7 @@ def dijkstra() :
     heapq.heappush(q, [0, 1])
     while q :
         dist, node = heapq.heappop(q)
-        if dlist[node][0] > dist : continue
+        if dlist[node][0] < dist : continue
         for i in graph[node] :
             cost = dlist[node][0] + i[1]
             if cost <= dlist[i[0]][0] :
