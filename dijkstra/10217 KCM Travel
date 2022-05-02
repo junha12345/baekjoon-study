@@ -20,7 +20,7 @@ for _ in range(t) :
             if cost+i[1]>m : continue
             ncost = cost + i[1]
             ntime = time + i[2]
-            if dp[i[0]][ncost] < ntime : continue
+            if dp[i[0]][ncost] <= ntime : continue
             dp[i[0]][ncost] = ntime
             heapq.heappush(q, (ntime, ncost, i[0]))
     if min(dp[n]) == INF : print("Poor KCM")
