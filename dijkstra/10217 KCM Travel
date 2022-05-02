@@ -1,5 +1,5 @@
 import sys
-import heapq
+from collections import deque
 input = sys.stdin.readline
 INF = int(1e9)
 t = int(input())
@@ -10,18 +10,18 @@ for _ in range(t) :
     for _ in range(k) :
         a, b, c, t = map(int, input().split())
         graph[a].append([b, c, t]) # graph[a] = to b, cost, time
-    dp = [[INF for _ in range(m+1)] for _ in range(n+1)] # dp[node][cost] = time
-    q = []
+    dp = [[INF]*(m+1) for _ in range(n+1)] # dp[node][cost] = time
     dp[1][0] = 0
-    heapq.heappush(q, (0, 0, 1)) # time, cost, node
+    q = deque([(0, 0, 1)])
     while q :
-        time, cost, node = heapq.heappop(q)
-        for i in graph[node] :
-            if cost+i[1]>m : continue
-            ncost = cost + i[1]
-            ntime = time + i[2]
-            if dp[i[0]][ncost] <= ntime : continue
-            dp[i[0]][ncost] = ntime
-            heapq.heappush(q, (ntime, ncost, i[0]))
-    if min(dp[n]) == INF : print("Poor KCM")
-    else : print(min(dp[n]))
+        time, cost, node = q.popleft()
+        if dp[node][cost] < time : continue
+        for nn, nc, nt in graph[node] :
+            tmp_c = nc + cost
+            tmp_t = nt + time
+            if tmp_c <= m and tmp_t < dp[nn][tmp_c] :
+                for i in range(tmp_c, m+1) :
+                    if tmp_t < dp[nn][i]: dp[nn][i] = tmp_t
+                    else : break
+                q.append((tmp_t, tmp_c, nn))
+    print(dp[n][m] if dp[n][m] != INF else "Poor KCM")
