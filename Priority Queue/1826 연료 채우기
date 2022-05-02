@@ -1,0 +1,22 @@
+import sys
+import heapq
+input = sys.stdin.readline
+
+n = int(input())
+gq = []
+for _ in range(n) :
+    heapq.heappush(gq, list(map(int, input().split())))
+end, gas = map(int, input().split())
+move = []
+cnt = 0
+while gas < end :
+    while gq and gq[0][0] <= gas :
+        gs, f = heapq.heappop(gq)
+        heapq.heappush(move, [-1*f, gs])
+    if not move :
+        cnt = -1
+        break
+    f, gs = heapq.heappop(move)
+    gas += -1*f
+    cnt += 1
+print(cnt)
