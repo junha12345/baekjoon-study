@@ -6,4 +6,8 @@ for _ in range(t) :
     n = int(input())
     while True :
         op = list(map(str, input().split()))
-        if 
+        if op[0] == "E" :
+            # i -> 기업 i와 현재 i의 센터까지의 거리출력
+        elif op[0] == "I" :
+            # i j -> 센터 i를 기업 j에 연결
+        else : break
