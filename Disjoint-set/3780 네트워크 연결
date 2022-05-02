@@ -1,13 +1,29 @@
 import sys
-from collections import deque
+input = sys.stdin.readline
+
+def find(x) :
+    if x == center[x] : return x
+    parents = find(center[x])
+    dist[x] += dist[center[x]]
+    center[x] = parents
+    return parents
+
+def union(x, y) : # x를 y에 병합
+    dist[x] = abs(x-y)%1000
+    center[x] = y
 
 t = int(input())
 for _ in range(t) :
     n = int(input())
+    center = [i for i in range(n+1)]
+    dist = [0]*(n+1) # dist[node] = d --> 센터에서 node 까지 거리 d
     while True :
-        op = list(map(str, input().split()))
+        op = input().split()
         if op[0] == "E" :
-            # i -> 기업 i와 현재 i의 센터까지의 거리출력
+            # i -> 기업 i와 센터까지의 거리출력 --> 부모 노드가 계속 바뀜
+            find(int(op[1]))
+            print(dist[int(op[1])])
         elif op[0] == "I" :
-            # i j -> 센터 i를 기업 j에 연결
+            a, b = map(int, op[1:])
+            union(a, b)
         else : break
