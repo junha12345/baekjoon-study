@@ -13,10 +13,8 @@ for i in range(1,n) :
         m = (m//price[i-1])*price[i]+m%price[i-1]-pm
         day = i # 마지막 위치 저장
 for j in range(day,n-1) :
-    if m*(k+1)>=price[j] and m*(k+1)-(price[j]-price[j+1])*((m*(k+1))//price[j]) > m :
+    if m*(k+1)>=price[j] and m*(k+1)-(price[j]-price[j+1])*((m*(k+1))//price[j]) > m+pm :
         dp.append(m*(k+1)-(price[j]-price[j+1])*(m*(k+1)//price[j]))
-if len(dp) != 0 :
-    m = max(dp)
-else :
-    m += pm
+if len(dp) != 0 : m = max(dp)
+else : m += pm
 print(m)
