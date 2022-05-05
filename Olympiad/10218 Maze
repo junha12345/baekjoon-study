@@ -1,0 +1,59 @@
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+
+def check(a, b) :
+    cnt = 0
+    idx = 0
+    for i in range(4) :
+        na = a + dir[i][0] ; nb = b + dir[i][1]
+        if na>n-1 or nb>m-1 or na<0 or nb<0 or road[na][nb] == "#" or visited[na][nb] == 1 :
+            continue
+        cnt += 1
+        if cnt > 1 :
+            print("XHAE")
+            exit(0)
+        idx = i
+    if cnt > 0 :
+        dfs(a, b, idx)
+
+def dfs(a, b, idx) :
+    visited[a][b] = 1
+    na = a + dir[idx][0] ; nb = b + dir[idx][1] ; d = idx
+    if road[na][nb] == "." and visited[na][nb] == 0 :
+        dfs(na, nb, d)
+        check(na, nb)
+    else :
+        ans.append(dir_k[d])
+        check(na, nb)
+
+t = int(input())
+for _ in range(t) :
+    n, m = map(int, input().split())
+    road = []
+    for _ in range(n) :
+        road.append(list(input()))
+    for i in range(n) :
+        for j in range(m) :
+            if road[i][j] == "O" :
+                x = i ; y = j
+                break
+    dir = [[-1, 0], [1, 0], [0, -1], [0, 1]] # 상하좌우
+    dir_k = ["D", "U", "R", "L"]
+    visited = [[0]*(m) for _ in range(n)]
+    ans = []
+    check(x, y)
+    back = "O"
+    print(ans)
+    '''
+    for i in ans :
+        if back == i :
+            continue
+        back = i
+        ans_r.append(i)
+    if len(ans_r) > 10 :
+        print("XHAE")
+        return
+    for i in ans_r :
+        print(i, end='')
+    '''
