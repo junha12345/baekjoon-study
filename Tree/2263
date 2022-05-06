@@ -1,0 +1,19 @@
+import sys
+input = sys.stdin.readline
+
+def sol(io_s, io_e, po_s, po_e) :
+    if io_s>io_e or po_s>po_e : return
+    root = porder[po_e]
+    left = node[root]-io_s
+    right = io_e - node[root]
+    print(root, end = ' ')
+    sol(io_s, io_s+left-1, po_s, po_s+left-1)
+    sol(io_e-right+1, io_e, po_e-right, po_e-1)
+
+n = int(input())
+iorder = list(map(int, input().split()))
+porder = list(map(int, input().split()))
+node = [0]*(n+1)
+for i in range(n) :
+    node[iorder[i]] = i
+sol(0, n-1, 0, n-1)
