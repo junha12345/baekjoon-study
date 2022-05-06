@@ -3,23 +3,24 @@ input = sys.stdin.readline
 
 def dfs(start) :
     for num, dist in node[start] :
-        if num == i or dlist[num] != 0 : continue
+        if num == index or dlist[num] != 0 : continue
         dlist[num] = dlist[start] + dist
         dfs(num)
 
 n = int(input())
 node = [[] for _ in range(n+1)] # 노드, 거리
+dlist = [0]*(n+1)
 for _ in range(n) :
     q = list(map(int, input().split()))
     for i in range(1, 2*n, 2) :
         if q[i] == -1 : break
         node[q[0]].append([q[i], q[i+1]])
-con = []
-dp = []
-for i in range(1, n+1) :
-    if len(node[i]) == 1 : con.append(i)
-for i in con :
-    dlist = [0]*(n+1)
-    dfs(i)
-    dp.append(max(dlist))
-print(max(dp))
+nmax = 0 ; index = 1
+dfs(index)
+for i in range(1,n+1) :
+    if nmax < dlist[i] :
+        nmax = dlist[i]
+        index = i
+dlist = [0]*(n+1)
+dfs(index)
+print(max(dlist))
