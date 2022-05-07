@@ -6,6 +6,7 @@ def bfs(a, b, size, eat) : # 물고기 먹을때마다 그 자리에서 bfs돌�
     global time
     q = deque() ; ans = []
     visited = [[0]*n for _ in range(n)]
+    distance = [[0]*n for _ in range(n)]
     q.append((a, b))
     visited[a][b] = 1
     while q :
@@ -13,9 +14,10 @@ def bfs(a, b, size, eat) : # 물고기 먹을때마다 그 자리에서 bfs돌�
         for i in range(4) :
             nx = x + dx[i] ; ny = y + dy[i]
             if -1<nx<n and -1<ny<n and visited[nx][ny] == 0 and size>=graph[nx][ny] :
-                visited[nx][ny] = visited[x][y] + 1
+                distance[nx][ny] = distance[x][y] + 1
+                visited[nx][ny] = 1
                 if size > graph[nx][ny] and graph[nx][ny] != 0:
-                    ans.append([nx, ny, visited[nx][ny]])
+                    ans.append([nx, ny, distance[nx][ny]])
                 q.append((nx, ny))
     if ans :
         ans.sort(key = lambda x: (-x[2], -x[0], -x[1]))
