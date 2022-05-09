@@ -1,0 +1,28 @@
+import sys
+INF = int(1e9)
+input = sys.stdin.readline
+
+def bmf(start) :
+    dist = [INF]*(n+1)
+    dist[start] = 0
+    for i in range(n) :
+        for a, b, d in graph :
+            if dist[a]+d < dist[b] : # 사이클의 유무만 판단
+                dist[b] = dist[a]+d
+                if i == n-1 : return True
+    return False
+
+t = int(input())
+for _ in range(t) :
+    flag = 0
+    n, m, w = map(int, input().split())
+    graph = []
+    for _ in range(m) :
+        a, b, d = map(int, input().split())
+        graph.append([a, b, d])
+        graph.append([b, a, d])
+    for _ in range(w) :
+        a, b, d = map(int, input().split())
+        graph.append([a, b, -d])
+    if bmf(1) : print("YES")
+    else : print("NO")
