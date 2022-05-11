@@ -1,5 +1,5 @@
-# idea SCC로 묶은 후 특정 SCC가 아닌 원소중 indegree 가 0 인 원소의 갯수
-# 예외 = 만약 모든 원소가 SCC에 포함할 시 한번에 다 넘어뜨릴수 있음
+# idea SCC로 묶은 후 특정 SCC 자체의 indegree 가 0 인 SCC의 갯수
+# 예외 = 만약 모든 원소가 SCC에 포함할 시 1 출력
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
@@ -22,43 +22,39 @@ def dfs(node) :
         while w != node :
             w = stack.pop()
             scc.append(w)
-            nscc[w] = idx
             finished[w] = 1
+            nscc[w] = idx
         ans.append(sorted(scc))
         idx += 1
     return parent
 
 t = int(input())
 for _ in range(t) :
-    cnt = 0
     idx = 0
     v, e = map(int, input().split())
+    ind = [[] for _ in range(v+1)]
     graph = [[] for _ in range(v+1)]
-    indegree = [0]*(v+1) # 각 원소의 indegree 파악
-    nscc = [-1]*(v+1)
     for _ in range(e) :
         a, b = map(int, input().split())
         graph[a].append(b)
-        indegree[b] += 1
+        ind[b].append(a)
     stack = []
     ans = []
     d = [0]*(v+1) # 방문 확인
     finished = [0]*(v+1) # 처리 확인
+    nscc = [-1]*(v+1)
     ids = 0
     for i in range(1, v+1) :
         if d[i] == 0 :
             dfs(i)
-    cscc = [1]*(len(ans))
-    print(nscc)
-    print(cscc)
-    print(ans)
-    for i in ans :
-        if len(i) == 1 and indegree[i[0]] == 1 :
+    scc_graph = {i : [] for i in set(nscc[1:])}
+    for i in range(1, v+1) :
+        for j in graph[i] :
+            if nscc[i] != nscc[j] :
+                scc_graph[nscc[j]].append(nscc[i])
+    cnt = 0
+    for _,n in scc_graph.items() :
+        if len(n) == 0 :
             cnt += 1
-            for j in graph[i[0]] :
-                if cscc[nscc[j]] == 1 :
-                    cscc[nscc[j]] = 0
-                    cnt -= 1
-        else :
-            cnt += 1
-    print(cnt)
+    if cnt : print(cnt)
+    else : print(1)
