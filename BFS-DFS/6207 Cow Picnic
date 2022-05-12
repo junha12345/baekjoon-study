@@ -1,0 +1,33 @@
+# 출력 = 소가 모일수 있는 위치 갯수
+# 시도 = 집합, bfs
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+def bfs(start) :
+    q = deque([start])
+    visited = [0]*(m+1)
+    visited[start] = 1
+    while q :
+        node = q.popleft()
+        for i in graph[node] :
+            if visited[i] : continue
+            visited[i] = 1
+            q.append(i)
+            ans[start].append(i)
+
+k, n, m = map(int, input().split()) # 소 수, 우리수, 길수
+con = []
+graph = [[] for _ in range(n+1)]
+for i in range(1,k+1) : # 현재 위치
+    con.append(int(input()))
+ans = {i : [i] for i in set(con)} # 각 우리에서 갈수있는 위치
+for _ in range(m) : # 연결된 길
+    a, b = map(int, input().split())
+    graph[a].append(b)
+for i in con :
+    bfs(i)
+cnt = set([i for i in range(1, n+1)])
+for _, i in ans.items() :
+    cnt &= set(i)
+print(len(cnt))
