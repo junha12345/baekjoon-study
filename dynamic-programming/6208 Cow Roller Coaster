@@ -1,0 +1,23 @@
+# 최고의 행복도의 가장 적은 예상
+# 예산내로 공사가 불가능시 -1 출력
+# dp[a][c] = b --> 길이가 a, 가격이 c인 상태에서 가장큰 행복 b
+import sys
+import heapq
+# from collections import deque
+input = sys.stdin.readline
+
+l, n, b = map(int, input().split()) # 길이, 조각, 예산
+dp = [[0 for _ in range(1001)] for _ in range(l+1)]
+cost = [[] for _ in range(l+1)] # cost[a] = [길이, 행복도, 가격]
+for _ in range(n) :
+    xi, wi, fi, ci = map(int, input().split())
+    heapq.heappush(cost[xi], [wi, fi, ci])
+for leng, fr, cr in cost[0] :
+    dp[leng][cr] = max(dp[leng][cr], fr)
+for i in range(1, l+1) :
+    for leng, fr, cr in cost[i] :
+        for j in range(1001) :
+            if dp[i][j] != 0 and j+cr <= b :
+                dp[i+leng][j+cr] = max(dp[i+leng][j+cr], dp[i][j]+fr)
+if max(dp[l]) == 0 : print(-1)
+else : print(max(dp[l]))
