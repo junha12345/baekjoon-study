@@ -7,18 +7,23 @@ def prime(x) :
         if x%i == 0 : return 0
     return 1
 
+def wonprime(n) :
+    for i in range(n, 3*(10**9)) :
+        idx = len(str(n))//2
+        for j in range(d,idx+1) :
+            k = str(i)
+            if k[j] != "0" :
+                x, y = int(k[:j]), int(k[j:])
+                if prime(x)*prime(y) :
+                    return i
+            if k[-j] != "0" :
+                x, y = int(k[:-j]), int(k[-j:])
+                if prime(x)*prime(y) :
+                    return i
+
 d, n = map(int, input().split()) # 최소 자릿수, n보다 큰 wonderprime
-for i in range(n, 2*(10**9)) :
-    idx = len(str(n))//2
-    for j in range(d,idx+1) :
-        k = str(i)
-        if k[j] != "0" :
-            x, y = int(k[:j]), int(k[j:])
-            if prime(x)*prime(y) :
-                print(i)
-                exit(0)
-        if k[-j] != "0" :
-            x, y = int(k[:-j]), int(k[-j:])
-            if prime(x)*prime(y) :
-                print(i)
-                exit(0)
+if len(str(n)) < d*2 : 
+    ans = wonprime(10**(2*d-1))
+else : 
+    ans = wonprime(n)
+print(ans)
