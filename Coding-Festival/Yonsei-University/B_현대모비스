@@ -1,0 +1,14 @@
+import sys
+#import math
+input = sys.stdin.readline
+
+t = int(input())
+idx = 1
+for _ in range(t) :
+    n = int(input()) # 부품개수
+    a, b = map(int, input().split()) # 제한크기, 무게
+    for _ in range(n) :
+        v1, v2 = map(int, input().split()) # 크기, 무게
+    print("Material Management",idx)
+    print("Classification ---- End!")
+    idx += 1
