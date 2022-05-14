@@ -4,27 +4,31 @@ from collections import deque
 input = sys.stdin.readline
 
 def move(a, b, idx, ans) : #(a,b), c or e
-    global flag
+    flag = 0
     q = deque([])
     cnt = 0
+    if visited[a][b] == 1 : return False
     visited[a][b] = 1
     q.append([a,b])
     while q :
         x, y = q.popleft()
         for i in range(2) :
-            if cnt == ans-1 :
-                flag = 1
-                while q :
             nx = dx[idx][i] + x
             ny = dy[idx][i] + y
-            if visited[nx][ny] == 0 and -1<nx<n and -1<ny<n :
+            if not (-1<nx<n and -1<ny<n) : continue
+            if cnt == ans-1 :
+                flag = 1
+                visited[nx][ny] = 1
+                continue
+            if visited[nx][ny] == 0 :
                 visited[nx][ny] = 1
                 graph[nx][ny] = idx
                 cnt += 1
                 q.append([nx, ny])
+    if flag == 1 : return True
+    return False
 
 n = int(input())
-flag = 0
 graph = [[0]*(n) for _ in range(n)]
 graph[0][0] = 2
 graph[n-1][n-1] = 1
@@ -34,9 +38,7 @@ c, e = map(int, input().split()) # 컴공구역, 공학구역
 # e-> 오아래대각
 dx = [[],[0, -1],[0, 1]]
 dy = [[],[-1, 0],[1, 0]]
-move(0, 0, 2, e) # 공
-move(n-1, n-1, 1, c)
-if flag == 0 : print(-1)
+if move(0, 0, 2, e)*move(n-1, n-1, 1, c) == False : print(-1)
 else :
     print(1)
     for i in range(n) :
