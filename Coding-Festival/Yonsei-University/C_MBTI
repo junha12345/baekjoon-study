@@ -1,0 +1,34 @@
+import sys
+#import math
+input = sys.stdin.readline
+
+def check(x, y, idx, d) : # 열, 행, idx
+    global cnt
+    nx = dx[d]+x ; ny = dy[d]+y
+    if nx<0 or nx>n-1 or ny<0 or ny>m-1 : return
+    if col[nx][ny] == mbti[idx][0] or col[nx][ny] == mbti[idx][1] :
+        if idx == 2 :
+            cnt += 1
+            return
+        check(nx, ny, idx+1, d)
+
+n, m = map(int, input().split()) # 열, 행
+col = []
+ans = []
+dx = [-1, -1, -1, 0, 0, 1, 1, 1]
+dy = [-1, 0, 1, -1, 1, -1, 0, 1]
+cnt = 0
+mbti = [["N","S"],["F","T"], ["P","J"]]
+for _ in range(n) :
+    col.append(list(map(str, input().rstrip())))
+for i in range(n) :
+    for j in range(m) :
+        if col[i][j] == "E" or col[i][j] == "I" :
+            ans.append([i, j])
+for x, y in ans :
+    for i in range(8) :
+        nx = dx[i]+x ; ny = dy[i]+y
+        if nx<0 or nx>n-1 or ny<0 or ny>m-1 : continue
+        if col[nx][ny] == mbti[0][0] or col[nx][ny] == mbti[0][1] :
+            check(nx, ny, 1, i)
+print(cnt)
