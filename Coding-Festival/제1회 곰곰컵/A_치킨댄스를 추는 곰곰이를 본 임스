@@ -1,0 +1,8 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+c, b = map(int, input().split())
+ans = c//2+b
+if n>ans : print(ans)
+else : print(n)
