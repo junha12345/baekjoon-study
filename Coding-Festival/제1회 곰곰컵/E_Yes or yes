@@ -1,0 +1,28 @@
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(m) :
+    a, b = map(int, input().split())
+    graph[a].append(b)
+k = int(input())
+ans = list(map(int, input().split()))
+
+def bfs(start) :
+    q = deque([])
+    flag = 0
+    q.append(start)
+    if start in ans :
+        return 0
+    while q :
+        x = q.popleft()
+        if not graph[x] : return 1
+        for node in graph[x] :
+            if node in ans : continue
+            q.append(node)
+    return 0
+
+if bfs(1) : print("yes")
+else : print("Yes")
