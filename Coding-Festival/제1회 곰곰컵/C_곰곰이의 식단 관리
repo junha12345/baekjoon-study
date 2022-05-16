@@ -1,0 +1,12 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+clist = list(map(str, input().rstrip()))
+cnt = 0
+for i in range(n) :
+    if clist[i] == "C" : cnt += 1
+if cnt == n : print(cnt)
+else :
+    if cnt%(n-cnt+1) == 0 : print(cnt//(n-cnt+1))
+    else : print(cnt//(n-cnt+1)+1)
