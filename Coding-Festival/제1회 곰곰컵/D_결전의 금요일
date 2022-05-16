@@ -1,0 +1,18 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+day = list(map(int, input().split()))
+cnt = []
+for i in day :
+    for j in range(len(cnt)) :
+        k = cnt[j]
+        if (i+k)%7 == 4 :
+            print("YES")
+            exit(0)
+        if (i+k)%7 not in cnt : cnt.append((i+k)%7)
+    if i%7 == 4 :
+        print("YES")
+        exit(0)
+    if i%7 not in cnt : cnt.append(i%7)
+print("NO")
