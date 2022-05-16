@@ -1,1 +1,15 @@
-.
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nset = set()
+cnt = 0
+for _ in range(n) :
+    x = input().rstrip()
+    if x == "ENTER" :
+        cnt += len(nset)
+        nset.clear()
+    else :
+        nset.add(x)
+cnt += len(nset)
+print(cnt)
