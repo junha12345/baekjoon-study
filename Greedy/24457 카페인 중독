@@ -42,7 +42,7 @@ if nlist :
     for i in range(len(dp)) :
         c, e = dp[i]
         if c<nlist[-1][1] : dp.append([c+nlist[-1][0], e+nlist[-1][1]-c])
-        dp.append([nlist[-1][0], nlist[-1][1]])
+        if idx<nlist[-1][1]-nlist[-1][0] : dp.append([nlist[-1][0], nlist[-1][1]])
     ans = []
     for i in range(len(dp)) :
         c, e = dp[i]
