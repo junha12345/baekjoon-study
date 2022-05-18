@@ -4,7 +4,7 @@ sys.setrecursionlimit(10**5)
 LOG = 16
 
 n = int(input())
-graph = [[] for _ in range(n+1)] # a to b 거리 d
+graph = [[] for _ in range(n+1)]
 parent = [[0]*LOG for _ in range(n+1)] # parent[a][i] --> a노드의 2^i 번째 부모의 노드저장
 dist = [0]*(n+1) # root to a = d
 dept = [0]*(n+1)
