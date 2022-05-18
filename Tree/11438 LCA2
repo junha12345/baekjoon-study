@@ -1,0 +1,44 @@
+# 깊이를 맞춘 상태에서 2^i 씩 부모를 탐색 --> 시간개선
+# dept, parent 를 저장
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**5)
+
+n = int(input())
+graph = [[] for _ in range(n+1)]
+parent = [[0]*21 for _ in range(n+1)] # parent[a][i] --> a노드의 2^i 번째 부모의 노드저장
+dept = [0]*(n+1)
+check = [0]*(n+1)
+for _ in range(n-1) :
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+def dfs(start, d) :
+    check[start] = 1
+    dept[start] = d
+    for i in graph[start] :
+        if check[i] : continue
+        parent[i][0] = start
+        dfs(i, d+1)
+
+def find(x, y) :
+    if dept[x]>dept[y] : x, y = y, x # dept[y]>dept[x]가 되도록
+    for i in range(20, -1, -1) :
+        if dept[y]-dept[x]>=(1<<i) :
+            y = parent[y][i] # --> dept 통일
+    if x==y : return x
+    for i in range(20, -1, -1) :
+        if parent[x][i] != parent[y][i] :
+            x = parent[x][i]
+            y = parent[y][i]
+    return parent[x][0]
+
+dfs(1, 0)
+for i in range(1,21) :
+    for j in range(1, n+1) :
+        parent[j][i] = parent[parent[j][i-1]][i-1]
+m = int(input())
+for _ in range(m) :
+    x, y = map(int, input().split())
+    print(find(x, y))
