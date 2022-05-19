@@ -1,0 +1,12 @@
+# 1번 차원이동부터 m 번째 차원이동을 순서대로 거쳐 최종적으로 변한 음료수 출력
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**5)
+
+n, m = map(int, input().split())
+cnode = [] # n번쨰 차원이동 u->v
+for _ in range(m) :
+    u, v = map(int, input().split())
+    cnode.append([u,v])
+for i in range(m) :
+    
