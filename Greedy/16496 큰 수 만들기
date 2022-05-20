@@ -6,7 +6,8 @@ nlist = list(map(str, input().split()))
 nums = [[] for _ in range(11)]
 for i in nlist :
     idx = len(i)
-    nums[int(i[0])].append([int(i+i[-1]*(10-idx)),i])
+    idx2 = 10%idx
+    nums[int(i[0])].append([int(i*(10//idx)+i[:idx2]),i])
 for i in range(11) :
     nums[i].sort(key=lambda x: -x[0])
 ans = ""
