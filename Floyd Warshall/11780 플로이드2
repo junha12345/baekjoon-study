@@ -1,0 +1,36 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+n = int(input())
+m = int(input())
+dp = [[INF]*(n+1) for _ in range(n+1)]
+road = [[0]*(n+1) for _ in range(n+1)] # road[a][b]=c a to b갈때 거쳐가는 c
+for i in range(1,n+1) : dp[i][i] = 0
+for _ in range(m) :
+    a, b, d = map(int, input().split())
+    dp[a][b] = min(dp[a][b], d)
+for k in range(1,n+1) :
+    for i in range(1, n+1) :
+        for j in range(1, n+1) :
+            if dp[i][k]+dp[k][j] < dp[i][j] : 
+                dp[i][j] = dp[i][k]+dp[k][j]
+                road[i][j] = k
+for i in range(1,n+1) :
+    for j in range(1,n+1) :
+        if dp[i][j] == INF : print(0, end=' ')
+        else : print(dp[i][j], end =' ')
+    print()
+
+def find(i, j) :
+    if road[i][j] == 0 : return []
+    k = road[i][j]
+    return find(i,k)+[k]+find(k,j)
+
+for i in range(1,n+1) :
+    for j in range(1,n+1) :
+        if dp[i][j] == INF or dp[i][j] == 0 : 
+            print(0)
+            continue
+        ans = [i]+find(i,j)+[j]
+        print(len(ans), *ans)
