@@ -5,7 +5,7 @@ INF = int(1e9)
 dp = [[INF] * (1 << n) for _ in range(n)]
 graph = []
 for _ in range(n) :
-graph.append(list(map(int, sys.stdin.readline().split())))
+  graph.append(list(map(int, sys.stdin.readline().split())))
 
 # 출발위치 0, 현재위치 x, 방문한 곳(2) visited
 def Dfs(x, visited) :
