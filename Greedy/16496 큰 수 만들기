@@ -1,0 +1,17 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(str, input().split()))
+nums = [[] for _ in range(11)]
+for i in nlist :
+    idx = len(i)
+    nums[int(i[0])].append([int(i+i[-1]*(10-idx)),i])
+for i in range(11) :
+    nums[i].sort(key=lambda x: -x[0])
+ans = ""
+for i in range(10,-1,-1) :
+    for k in nums[i] :
+        ans += k[1]
+if ans[0] == "0" : print(0)
+else : print(ans)
