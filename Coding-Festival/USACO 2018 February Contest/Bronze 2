@@ -1,0 +1,39 @@
+# 농부가 소에게 공을 패스, 받은소는 농부OR소에게 패스 (같은 거리는 왼쪽에)
+# idea = indegree 0인 정점 수 + indegree 1인 cycle 수
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist= list(map(int, input().split()))
+nlist.sort()
+visited = [0]*(n)
+indegree = [0]*(n)
+cycle = [] # 사이클 오른쪽 idx
+
+def dfs(start) :
+    global cnt
+    if visited[start] : return
+    visited[start] = 1
+    if start == 0 :
+        indegree[1] += 1
+        dfs(1)
+    elif start == n-1 :
+        if indegree[start-1] == 0 and indegree[start] == 1 : cycle.append(start)
+        indegree[-2] += 1
+        dfs(n-2)
+    else :
+        if nlist[start]-nlist[start-1]<=nlist[start+1]-nlist[start] :
+            if indegree[start-1] == 0 and indegree[start] == 1 : cycle.append(start)
+            indegree[start-1] += 1   
+            dfs(start-1)
+        else :
+            indegree[start+1] += 1
+            dfs(start+1)
+
+cnt = 0
+for i in range(n) :
+    if visited[i] == 0 : dfs(i)
+cnt += indegree.count(0)
+for i in cycle :
+    if indegree[i] == 1 : cnt += 1
+print(cnt)
