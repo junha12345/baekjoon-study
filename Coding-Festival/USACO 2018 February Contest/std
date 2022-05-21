@@ -1,0 +1,26 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+n = int(input())
+nlist= [INF]+list(map(int, input().split()))+[INF]
+nlist.sort()
+visited = [0]*(n)
+indegree = [0]*(n)
+cycle = [] # 사이클 오른쪽 idx
+
+def dfs(start) :
+    if visited[start] : return
+    visited[start] = 1
+    if nlist[start]-nlist[start-1]<=nlist[start+1]-nlist[start] :
+        if indegree[start-1] == 0 and indegree[start] == 1 : cycle.append(start)
+        indegree[start-1] += 1   
+    else : indegree[start+1] += 1
+
+cnt = 0
+for i in range(1,n) :
+    if visited[i] == 0 : dfs(i)
+cnt += indegree.count(0)
+for i in cycle :
+    if indegree[i] == 1 : cnt += 1
+print(cnt)
