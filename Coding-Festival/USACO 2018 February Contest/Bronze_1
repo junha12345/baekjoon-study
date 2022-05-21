@@ -1,0 +1,6 @@
+import sys
+input = sys.stdin.readline
+
+a, b, x, y = map(int, input().split()) #시작, 도착, x <-> y
+if a<=b : print(min(abs(a-b),abs(a-min(x,y))+abs(b-max(x,y))))
+else : print(min(abs(a-b),abs(a-max(x,y))+abs(b-min(x,y))))
