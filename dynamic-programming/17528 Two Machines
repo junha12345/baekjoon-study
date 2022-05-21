@@ -1,0 +1,23 @@
+# dp[i][t1] = t2 // i번째 작업까지 a가 t1만큼 담당할때 b가 담당하는 최소시간 t2
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+n = int(input())
+dp = [[INF]*62501 for _ in range(251)]
+nlist = [[]]
+for _ in range(n) :
+    a, b = map(int, input().split())
+    nlist.append([a, b])
+dp[1][nlist[1][0]] = 0
+dp[1][0] = nlist[1][1]
+for i in range(2,n+1) :
+    for j in range(62501) :
+        if dp[i-1][j] != INF :
+            dp[i][j+nlist[i][0]] = dp[i-1][j]
+            dp[i][j] = min(dp[i][j], dp[i-1][j]+nlist[i][1])
+ans = INF
+for i in range(62501) :
+    if dp[n][i] != INF :
+        ans = min(ans, max(dp[n][i], i))
+print(ans)
