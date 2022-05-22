@@ -1,0 +1,19 @@
+import sys
+input = sys.stdin.readline
+
+a, b, x, y = map(int, input().split())
+dp = [[a,b,x,0]]
+ans = []
+# 체력이 부족하면 무조건 초반에 반격만 하고 (공격or버프를 진행)
+for i in range(x//y+1) :
+    a, b, x, cnt = dp[i]
+    dp.append([int(1.1*a),b,x-y,cnt+1])
+for a,b,x,idx in dp :
+    if a>9*y and b>=5 and x>7*b :
+        ans.append([a-3*y,int(1.2*b),x,idx+1])
+    elif y < b and (a>y or x-b<= 0) :
+        ans.append([a-y,b,x-b,idx+1])
+    for _,_,i,idx in ans :
+        if i <= 0 :
+            print(idx)
+            exit(0)
