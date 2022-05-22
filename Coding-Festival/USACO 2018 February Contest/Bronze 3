@@ -1,0 +1,28 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(int, input().split()))
+indegree = [0]*n 
+# 0은 모르겠음, 1은 발생확실, -1은 발생X
+# 예외 = 첫날에 나왔다는 증거가 없을경우 -1출력 + 불가능한경우
+
+def possible() :
+    tmp = 0
+    for i in range(n) :
+        if nlist[i] != -1 :
+            idx = nlist[i]
+            if i-idx<0 or nlist[i-idx]>=1 or i-idx<tmp : return False
+            tmp = i-idx
+    return True
+
+if possible() :
+    indegree[0] = 1
+    for i in range(1,n) :
+        if nlist[i] != -1 :
+            idx = nlist[i]
+            indegree[i-idx] = 1
+            for j in range(idx) : indegree[i-j] = -1
+    ans = [indegree.count(1), indegree.count(0)+indegree.count(1)]
+    print(*ans)
+else : print(-1)
