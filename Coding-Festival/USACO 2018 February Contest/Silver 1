@@ -5,25 +5,15 @@ input = sys.stdin.readline
 
 l, n, r_f, r_b = map(int, input().split())
 rest = []
-ans = [] # 먹을 경로 저장
-cnt = 0
+ans = 0
 for _ in range(n) :
     x, c = map(int, input().split())
     rest.append([x, c])
-rest.sort()
-point = -1
-while True :
-    tmp = -1
-    idx = -1
-    for i in range(point+1,n) :
-        if rest[i][1]>=tmp :
-            tmp = rest[i][1]
-            idx = i
-    ans.append(idx)
-    point = idx
-    if point == n-1 : break
-idx = 0
-for i in ans :
-    cnt += (r_f-r_b)*(rest[i][0]-idx)*rest[i][1]
-    idx = rest[i][0]
-print(cnt)
+rest.sort(key=lambda x : -x[1])
+idx = rest[0][0]
+ans += (r_f-r_b)*idx*rest[0][1]
+for x,c in rest[1:] :
+    if x>idx :
+        ans+=(r_f-r_b)*(x-idx)*c
+        idx = x
+print(ans)
