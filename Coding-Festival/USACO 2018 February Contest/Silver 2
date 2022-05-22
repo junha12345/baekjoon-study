@@ -1,0 +1,26 @@
+# idea = 경로상 가장 맛있는 곳에서 오랜쉬고(따라잡히지 않을정도)
+# 그 다음으로 맛있는 곳에서 쉬고를 반복
+import sys
+input = sys.stdin.readline
+
+n, b = map(int, input().split())
+dp = [-1]*(251) # dp[n] = b --> n번째 타일에서버린부츠 개수 b
+dept = [0]+list(map(int, input().split()))
+boots = []
+for _ in range(b) :
+    x, y = map(int, input().split())
+    boots.append([x, y]) # 깊이, 최대 이동거리
+
+def dfs(start, d, m, idx) :
+    for i in range(1,m+1) :
+        if start+i>n : continue
+        if d>=dept[start+i] and dp[start+i]==-1 : 
+            dp[start+i] = idx
+
+dp[1] = 0
+for j in range(b) :
+    d, m = boots[j]
+    for i in range(1,n+1) :
+        if dp[i]>=0 and d>=dept[i] :
+            dfs(i,d,m,j)
+print(dp[n])
