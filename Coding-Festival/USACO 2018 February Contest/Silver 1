@@ -1,0 +1,29 @@
+# idea = 경로상 가장 맛있는 곳에서 오랜쉬고(따라잡히지 않을정도)
+# 그 다음으로 맛있는 곳에서 쉬고를 반복
+import sys
+input = sys.stdin.readline
+
+l, n, r_f, r_b = map(int, input().split())
+rest = []
+ans = [] # 먹을 경로 저장
+cnt = 0
+for _ in range(n) :
+    x, c = map(int, input().split())
+    rest.append([x, c])
+rest.sort()
+point = -1
+while True :
+    tmp = -1
+    idx = -1
+    for i in range(point+1,n) :
+        if rest[i][1]>=tmp :
+            tmp = rest[i][1]
+            idx = i
+    ans.append(idx)
+    point = idx
+    if point == n-1 : break
+idx = 0
+for i in ans :
+    cnt += (r_f-r_b)*(rest[i][0]-idx)*rest[i][1]
+    idx = rest[i][0]
+print(cnt)
