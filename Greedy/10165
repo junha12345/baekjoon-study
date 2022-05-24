@@ -8,9 +8,25 @@ leng = int(input())
 n = int(input())
 nlist = [] # idx-1번째에 노선이 저장됨
 l = []
+ans = []
 for i in range(1,n+1) :
     a, b = map(int, input().split())
-    if a<b : nlist.append([a, b, i])
-    else : nlist.append([a,b+n,i])
-nlist.sort(key=lambda x: x[0])
-print(nlist)
+    if a<b : nlist.append([a, b-a, i])
+    else : nlist.append([a,b-a+leng,i])
+nlist.sort(key=lambda x: -x[1])
+l.append([nlist[0][0],nlist[0][1]])
+ans.append(nlist[0][2])
+for x,d1,idx in nlist[1:] :
+    flag = 0
+    for a,d2 in l :
+        if a<=x and x+d1<=a+d2 : # 0이후 포함
+            flag = 1
+            break
+        elif x<=a and x+d1<=a-leng+d2 : # 0을 지나서 포함
+            flag = 1
+            break
+    if flag == 0 : 
+        l.append([x,d1])
+        ans.append(idx)
+ans.sort()
+print(*ans)
