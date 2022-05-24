@@ -1,0 +1,23 @@
+# convex hull 구현
+# 기준점은 y좌표가 가장 작은거 if 중복 --> 그중 x좌표가 가장 작은거
+# 기준점을 기준으로 반시계 방향 정렬 (ccw)
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+def ccw(x1,y1,x2,y2,x3,y3) :
+    idx = (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1)
+    if idx>0 : return 1 #시 반
+    elif idx == 0 : return 0 #직선
+    else : return -1 #시
+
+n = int(input())
+nlist = []
+for _ in range(n) :
+    nlist.append(list(map(int, input().split()))) # x,y,ang
+nlist.sort(key=lambda x: (x[1],x[0]))
+start = nlist[0]
+nlist.remove(start)
+for i in range(n-1) :
+    if start[1] == nlist[i][1] : nlist[i].append(0)
+    else : nlist[i].append()
