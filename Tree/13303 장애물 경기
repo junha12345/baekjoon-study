@@ -7,10 +7,10 @@ nlist = []
 for _ in range(n) :
     nlist.append(list(map(int, input().split())))
 nlist.sort(key=lambda x: x[0])
-# y좌표, 이동거리(위,아래)
+# y좌표, 이동거리(위,아래만)
 # 동일 y좌표에서 이동거리가 짧은것을 선택
 def dfs(idx, y, dist) :
-    if idx != n :
+    if idx < n :
         if nlist[idx][1]<y<nlist[idx][2] :
             dfs(idx+1, nlist[idx][2], dist+nlist[idx][2]-y)
             dfs(idx+1, nlist[idx][1], dist+y-nlist[idx][1])
@@ -21,9 +21,7 @@ def dfs(idx, y, dist) :
         ans[dist].append(y)
 ans = {} # key = distance, value = y좌표
 dfs(0, a, 0)
-idx = min(ans.keys())
-tmp = set(ans[idx])
-sol = list(tmp)
-sol.sort()
-print(idx+b)
+key = min(ans.keys())
+sol = sorted(list(set(ans[key])))
+print(key+b)
 print(len(sol), *sol)
