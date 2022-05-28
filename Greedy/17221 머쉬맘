@@ -1,0 +1,46 @@
+import sys
+input = sys.stdin.readline
+
+a, b, x, y = map(int, input().split())
+dp = [[a,b,x,1]] # 모든 경우 단 자신이 죽거나 보스가 죽는경우 예외처리
+cnt = 0 # 취한 행동수
+if b<5 and a>=10 and b>y :
+    if x//b<=a//y :
+        if x%b==0 : print(x//b)
+        else : print(x//b+1)
+    else :
+        if x%b==0 : tmp = 0
+        else : tmp = 1
+        while a<=(x//b+tmp)*y :
+            a = int(1.1*a)
+            x -= y
+            if x%b==0 : tmp = 0
+            else : tmp = 1
+            cnt += 1
+        print(cnt+tmp+x//b)
+    exit(0)
+while True :
+    ans = dp.copy()
+    dp = []
+    for a,b,x,idx in ans :
+        if a<=0 : continue
+        if idx == 1 :
+            if a>9*y and b>=5 and x>7*b :
+                dp.append([a-3*y,int(1.2*b),x,0])
+            elif y < b and (a>y or x-b<= 0) :
+                dp.append([a-y,b,x-b,0])
+            if a>int(2*10**8) :
+                dp.append([a,b,x-y,1])
+            else :
+                dp.append([int(1.1*a),b,x-y,1])
+        else :
+            if a>9*y and b>=5 and x>7*b :
+                dp.append([a-3*y,int(1.2*b),x,0])
+            elif y < b and (a>y or x-b<= 0) :
+                dp.append([a-y,b,x-b,0])
+    ans = []
+    cnt += 1
+    for _,_,i,_ in dp :
+        if i <= 0 :
+            print(cnt)
+            exit(0)
