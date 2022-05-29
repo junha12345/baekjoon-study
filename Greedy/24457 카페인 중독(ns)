@@ -1,0 +1,44 @@
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+n = int(input())
+e = list(map(int, input().split()))
+c = list(map(int, input().split()))
+plist = [] # idx 증가
+nlist = [] # idx 감소
+# sol = idx 가 최대인 상태에서 max e를 더해주는 방법
+# 예외 = idx 증가하는 구간이 없으면 가장 큰 idx, 가장 작은 c 에서 가장 큰수를 더함?
+for i in range(n) :
+    if e[i]>2*c[i] :
+        plist.append([e[i],c[i]])
+    else :
+        nlist.append([e[i],c[i]])
+if plist :
+    plist.sort(key=lambda x: x[1])
+    me, mc = 0, 0
+    for x, y in plist :
+        me += x-mc
+        mc += y
+    if nlist :
+        nlist.sort(key=lambda x: (x[0]-x[1], x[1]))
+        pe,pc = nlist.pop()
+        if me+pe-2*mc-pc>=me-mc :
+            me += pe-mc
+            mc += pc
+            cnt = max(r[0] for r in nlist)
+            if cnt>mc : print(me+cnt-mc)
+            else : print(me)
+        else :
+            nlist.append([pe,pc])
+            cnt = max(r[0] for r in nlist)
+            if cnt>mc : print(me+cnt-mc)
+            else : print(me)
+    else : print(me)
+else :
+    nlist.sort(key=lambda x: (x[0]-x[1], x[1]))
+    me, mc = nlist.pop()
+    if nlist : cnt = max(r[0] for r in nlist)
+    else : cnt = 0
+    if cnt>mc : print(me+cnt-mc)
+    else : print(me)
