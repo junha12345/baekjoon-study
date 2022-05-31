@@ -1,0 +1,36 @@
+import sys
+import math
+input = sys.stdin.readline
+
+n = int(input())
+INF = int(1e9)
+dp = [[INF] * (1 << n) for _ in range(n)]
+graph = [[] for _ in range(n)]
+scale = []
+for i in range(n) :
+    scale.append(list(map(int, input().split())))
+for i in range(n) :
+    for j in range(n) :
+        graph[i].append(math.sqrt((scale[i][0]-scale[j][0])**2+(scale[i][1]-scale[j][1])**2))
+
+# 출발위치 0, 현재위치 x, 방문한 곳(2진법) visited
+def Dfs(x, visited) :
+    #전체 방문완료
+    if visited == (1 << n) -1 :
+        if graph[x][0] :
+            return graph[x][0]
+        else :
+            return INF
+    #이미 방문하여 최소비용 구함
+    if dp[x][visited] != INF :
+        return dp[x][visited]
+    #도시 탐방
+    for i in range(1, n) :
+        if not graph[x][i] :
+            continue
+        if visited & (1 << i) :
+            continue
+        dp[x][visited] = min(dp[x][visited], Dfs(i, visited | 1 << i) + graph[x][i])
+    return dp[x][visited]
+
+print(Dfs(0,1))
