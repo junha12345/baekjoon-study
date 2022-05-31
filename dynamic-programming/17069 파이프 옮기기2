@@ -1,0 +1,35 @@
+import sys
+input = sys.stdin.readline
+
+# sol = dp[x][y] = [가로, 세로, 대각] 들어갈수 있는 방향
+# 특정위치에서 방향이 3가지 중 하나일때 움직일 수 있는 방향 계속 누적
+n = int(input())
+nlist = []
+dp = [[[0,0,0] for _ in range(n)] for _ in range(n)]
+for _ in range(n) :
+    nlist.append(list(map(int, input().split())))
+dp[0][1] = [1,0,1]
+for x in range(n) :
+    if x == 0 : tmp = 2
+    else : tmp = 0
+    for y in range(tmp,n) :
+        if nlist[x][y] == 1 : continue
+        if 0<=x-1 and 0<=y-1 : # 위,옆,대각
+            if nlist[x][y-1] == 1 or nlist[x-1][y] == 1 :
+                dp[x][y][0] += dp[x][y-1][0]
+                dp[x][y][1] += dp[x-1][y][1]
+                dp[x][y][2] += dp[x][y-1][0]+dp[x-1][y][1]
+            else :
+                dp[x][y][0] += dp[x][y-1][0]+dp[x-1][y-1][2]
+                dp[x][y][1] += dp[x-1][y][1]+dp[x-1][y-1][2]
+                dp[x][y][2] += dp[x][y-1][0]+dp[x-1][y][1]+dp[x-1][y-1][2]
+        elif 0<=x-1 : # 위만
+            dp[x][y][1] += dp[x-1][y][1]
+            dp[x][y][2] += dp[x-1][y][1]
+        elif 0<=y-1 : # 옆만
+            dp[x][y][0] += dp[x][y-1][0]
+            dp[x][y][2] += dp[x][y-1][0]
+if nlist[n-1][n-1] == 1 : print(0)
+else : 
+    if nlist[x][y-1] == 1 or nlist[x-1][y] == 1 : print(dp[n-1][n-2][0]+dp[n-2][n-1][1])
+    else : print(dp[n-2][n-2][2]+dp[n-1][n-2][0]+dp[n-2][n-1][1])
