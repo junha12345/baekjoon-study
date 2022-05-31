@@ -1,0 +1,52 @@
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+nlist = []
+for _ in range(n) :
+    nlist.append(list(map(int, input().rstrip())))
+# sol = 0을 기준으로 dfs -> 1을 기준으로 상하좌우 visited = 1 인곳의 수를 합
+visited = [[0]*m for _ in range(n)]
+ans = [[[0,0] for _ in range(m)] for _ in range(n)] # 값, idx
+
+def dfs(x, y) :
+    global cnt
+    visited[x][y] = 1
+    memory.append([x,y])
+    for i in range(4) :
+        nx = dx[i]+x
+        ny = dy[i]+y
+        if 0<=nx<n and 0<=ny<m and visited[nx][ny] == 0 and nlist[nx][ny] == 0 :
+            cnt += 1
+            dfs(nx,ny)
+            
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1] # 상하좌우
+idx = 1
+for i in range(n) :
+    for j in range(m) :
+        if nlist[i][j] == 0 and visited[i][j] == 0 :
+            cnt = 1
+            memory = []
+            dfs(i,j)
+            for x,y in memory :
+                ans[x][y] = [cnt,idx]
+            idx += 1
+for x in range(n) :
+    for y in range(m) :
+        if nlist[x][y] == 1 :
+            tmp = 0
+            check = set()
+            for i in range(4) :
+                nx = dx[i]+x
+                ny = dy[i]+y
+                if 0<=nx<n and 0<=ny<m :
+                    if ans[nx][ny][1] in check : continue
+                    tmp += ans[nx][ny][0]
+                    check.add(ans[nx][ny][1])
+            nlist[x][y] = (tmp+1)%10
+for i in range(n) :
+    for j in range(m) :
+        print(nlist[i][j],end='')
+    print()
