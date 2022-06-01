@@ -1,0 +1,24 @@
+import sys
+input = sys.stdin.readline
+
+t = int(input())
+for _ in range(t) :
+    n = int(input())
+    nlist = []
+    for _ in range(n) :
+        nlist.append(input().rstrip())
+    nlist.sort()
+    ans = []
+    flag = 0
+    for i in range(n) :
+        string = nlist[i]
+        if ans :
+            ph = ans[i-1]
+            idx = len(ph)
+            if string[:idx] == ph :
+                flag = 1
+                break
+        ans.append(string)
+        if flag == 1 : break
+    if flag == 1 : print("NO")
+    else : print("YES")
