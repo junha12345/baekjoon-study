@@ -1,0 +1,78 @@
+import sys
+import math
+input = sys.stdin.readline
+
+def ccw(p1,p2,p3) :
+    x1, y1 = p1[0],p1[1]
+    x2, y2 = p2[0],p2[1]
+    x3, y3 = p3[0],p3[1]
+    idx = (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1)
+    if idx>0 : return 1 #시 반
+    elif idx == 0 : return 0 #직선
+    else : return -1 #시
+
+def distance(p1, p2) :
+    x1, y1 = p1[0], p1[1]
+    x2, y2 = p2[0], p2[1]
+    return math.sqrt((x1-x2)**2+(y1-y2)**2)
+
+def chunk(flist,rlist) :
+    for i in range(0, len(flist), 2) :
+        rlist.append(flist[i:i+2])
+    return rlist
+
+t = int(input())
+for _ in range(t) :
+    n = int(input())
+    blist = []
+    nlist = []
+    if n%5 == 0 : tmp = 0
+    else : tmp = 1
+    for _ in range(n//5+tmp) :
+        blist.append(list(map(int, input().split()))) # x,y,ang
+    for i in blist :
+        nlist = chunk(i,nlist)
+    nlist.sort(key=lambda x: (-x[1],x[0]))
+    start = nlist[0]
+    nlist.remove(start)
+    inf = []
+    negative = []
+    positive = []
+    # x가 가장작은걸로 선택 --> 기울기가 0인 부분은 가장 마지막 부분임
+    for i in range(n-1) :
+        if start[0] == nlist[i][0] : inf.append(nlist[i])
+        elif (start[1]-nlist[i][1])/(start[0]-nlist[i][0]) <= 0 :
+            nlist[i].append((start[1]-nlist[i][1])/(start[0]-nlist[i][0]))
+            negative.append(nlist[i])
+        else :
+            nlist[i].append((start[1]-nlist[i][1])/(start[0]-nlist[i][0]))
+            positive.append(nlist[i])
+    # negative - 큰순서 -> inf -> positive - 큰순서
+    negative.sort(key=lambda x: -x[2])
+    positive.sort(key=lambda x: -x[2])
+    nlist.clear()
+    for i in negative : nlist.append(i)
+    for i in inf : nlist.append(i)
+    for i in positive : nlist.append(i)
+    stack = []
+    stack.append(start)
+    stack.append(nlist[0])
+    for i in range(1,n-1) :
+        if ccw(stack[-2],stack[-1],nlist[i])<0 : 
+            stack.append(nlist[i])
+        elif ccw(stack[-2],stack[-1],nlist[i])>0 :
+            while 1 :
+                stack.pop()
+                if ccw(stack[-2],stack[-1],nlist[i])<=0 : break
+            stack.append(nlist[i])
+        else :
+            if distance(stack[-2],nlist[i])>distance(stack[-1], nlist[i]) :
+                stack.pop()
+                stack.append(nlist[i])
+    dellist = []
+    for i in range(1,len(stack)-1) :
+        if ccw(stack[-i],stack[-(i+1)],stack[-(i+2)]) == 0 : dellist.append(stack[-(i+1)])
+    for d in dellist : stack.remove(d)
+    print(len(stack))
+    for i in stack :
+        print(i[0], i[1])
