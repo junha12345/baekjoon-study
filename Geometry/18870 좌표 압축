@@ -1,0 +1,9 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(int, input().split()))
+mlist = sorted(set(nlist))
+idx = {mlist[i] : i for i in range(len(mlist))}
+for i in nlist :
+    print(idx[i], end = ' ')
