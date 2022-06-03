@@ -10,21 +10,23 @@ def ccw(p1,p2,p3) :
     if idx>0 : return True #시 반
     else : return False #시
 
-n, px, py = map(int, input().split())
-pxy = (px, py)
+n = int(input())
 dots = []
-for _ in range(n):
+police = []
+for _ in range(n) :
     dots.append(tuple(map(int, input().split())))
-possible = True
-cnt = 0
-
+ans = dots.copy()
+m = int(input())
+for _ in range(m) :
+    police.append(tuple(map(int, input().split())))
 # 모노톤 체인 방식(top, bottom)
-while possible and len(dots) > 2 :
+for pl in police :
+    dots.append(pl)
     dots.sort() # xmin -> ymin 정렬
     bch, tch = [], []
     bch.append(dots[0])
     bch.append(dots[1])
-    for i in range(2, n) :
+    for i in range(2, n+1) :
         bch.append(dots[i])
         p = True
         while p and len(bch) > 2 :
@@ -37,7 +39,7 @@ while possible and len(dots) > 2 :
             else : bch.append(d1)       
     tch.append(dots[-1])
     tch.append(dots[-2])
-    for i in range(n-3, -1, -1) :
+    for i in range(n-2, -1, -1) :
         tch.append(dots[i])
         p = True
         while p and len(tch) > 2 :
@@ -50,12 +52,6 @@ while possible and len(dots) > 2 :
             else : tch.append(d1)     
     bch.pop() # 중복삭제
     ch = bch+tch
-    # sol = 감옥인 점과 둘러싼 점들이 모두 ccw>1 -> ok 
-    for i in range(len(ch)-1) :
-        if not ccw(ch[i], ch[i+1], pxy) :
-            possible = False
-            break
-    if possible : cnt += 1
-    dots = list(set(dots)-set(ch))
-    n = len(dots)
-print(cnt)
+    # sol = 경찰을 추가한 후 다시 ch를 구성한 상태에서 중복된 점들을 삭제
+    overlap = list(set(ans)-set(ch))
+    print(ans)
