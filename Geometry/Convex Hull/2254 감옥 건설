@@ -1,0 +1,61 @@
+import sys
+input = sys.stdin.readline
+
+# tuple에서는 요소값을 바로 사용가능
+def ccw(p1,p2,p3) :
+    x1, y1 = p1
+    x2, y2 = p2
+    x3, y3 = p3
+    idx = (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1)
+    if idx>0 : return True #시 반
+    else : return False #시
+
+n, px, py = map(int, input().split())
+pxy = (px, py)
+dots = []
+for _ in range(n):
+    dots.append(tuple(map(int, input().split())))
+possible = True
+cnt = 0
+
+# 모노톤 체인 방식(top, bottom)
+while possible and len(dots) > 2 :
+    dots.sort() # xmin -> ymin 정렬
+    bch, tch = [], []
+    bch.append(dots[0])
+    bch.append(dots[1])
+    for i in range(2, n) :
+        bch.append(dots[i])
+        p = True
+        while p and len(bch) > 2 :
+            d1 = bch.pop()
+            d2 = bch.pop()
+            if ccw(bch[-1], d2, d1) :
+                bch.append(d2)
+                bch.append(d1)
+                p = False
+            else : bch.append(d1)       
+    tch.append(dots[-1])
+    tch.append(dots[-2])
+    for i in range(n-3, -1, -1) :
+        tch.append(dots[i])
+        p = True
+        while p and len(tch) > 2 :
+            d1 = tch.pop()
+            d2 = tch.pop()
+            if ccw(tch[-1], d2, d1) :
+                tch.append(d2)
+                tch.append(d1)
+                p = False
+            else : tch.append(d1)     
+    bch.pop() # 중복삭제
+    ch = bch+tch
+    # sol = 감옥인 점과 둘러싼 점들이 모두 ccw>1 -> ok 
+    for i in range(len(ch)-1) :
+        if not ccw(ch[i], ch[i+1], pxy) :
+            possible = False
+            break
+    if possible : cnt += 1
+    dots = list(set(dots)-set(ch))
+    n = len(dots)
+print(cnt)
