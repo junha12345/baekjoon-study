@@ -1,0 +1,35 @@
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+# 홀수점이 2개를 넘을 때 불가능
+# 끝어진 묶음들을 우선적으로 연결 cnt += 끊긴개수-1
+# 묶음들 내부를 연결 cnt += 홀수개수//2-1
+
+def dfs(start) :
+    visited[start] = 1
+    for i in graph[start] :
+        if visited[i] == 0 :
+            dfs(i)
+
+v, e = map(int, input().split())
+indegree = [0]*(v+1)
+graph = [[]for _ in range(v+1)]
+for _ in range(e) :
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+    indegree[a] += 1
+    indegree[b] += 1
+cnt = -1
+idx = 0
+visited = [0]*(v+1)
+for i in range(1,v+1) :
+    if not visited[i] :
+        cnt += 1
+        dfs(i)
+print(cnt)
+for i in range(1,v+1) :
+    if indegree[i]%2 != 0 : idx += 1
+idx -= 2*cnt
+if idx<4 : print(cnt)
+else : print(cnt+idx//2-1)
