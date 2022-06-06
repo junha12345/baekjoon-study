@@ -1,0 +1,36 @@
+import sys
+input = sys.stdin.readline
+
+# sol = 머지소트 트리에서 bottom up 방식으로 특정 구간만 merge
+# i~j 까지의 트리를 추출, 추출된 요소에서 i 번째 요소 출력
+# mlogn 풀이
+
+def merge_sort(nslist) :
+    if len(nslist) <= 1 :
+        return nslist
+    mid = len(nslist)//2
+    left = merge_sort(nslist[:mid])
+    right = merge_sort(nslist[mid:len(nslist)])
+    return merge(left, right)
+
+def merge(left, right) :
+    i = 0
+    j = 0
+    slist = []
+    while i<len(left) and j<len(right) :
+        if left[i] <= right[j] :
+            slist.append(left[i])
+            i+=1
+        else :
+            slist.append(right[j])
+            j+=1
+    if i==len(left) : slist = slist + right[j:len(right)]
+    if j==len(right) : slist = slist + left[i:len(left)]
+    return slist
+
+n, m = map(int, input().split())
+nslist = list(map(int, input().split()))
+for _ in range(m) :
+    i, j, k = map(int, input().split())
+    ans = merge_sort(nslist[i-1:j])
+    print(ans[k-1])
