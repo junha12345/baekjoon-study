@@ -1,0 +1,39 @@
+# sol = 백신 전 후 n*m 구역의 다른 구역의 카운트값이 1이하일시 통과
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
+
+def check(x,y,bidx,aidx) : #x,y에 위치부터 시작 바뀐값 idx
+    visited[x][y] = 1
+    for i in range(4) :
+        nx = x+dx[i]
+        ny = y+dy[i]
+        if 0<=nx<n and 0<=ny<m and visited[nx][ny] == 0 :
+            if bf[nx][ny] == bidx :
+                if af[nx][ny] == aidx :
+                    check(nx,ny,bidx,aidx)
+                else :
+                    print("NO")
+                    exit(0)
+
+n, m = map(int, input().split())
+bf = []
+af = []
+visited = [[0]*m for _ in range(n)]
+dx = [-1,1,0,0]
+dy = [0,0,-1,1] # 상하좌우
+for _ in range(n) :
+    bf.append(list(map(int, input().split(' '))))
+for _ in range(n) :
+    af.append(list(map(int, input().split(' '))))
+cnt = 0
+for i in range(n) :
+    for j in range(m) :
+        if bf[i][j] != af[i][j] and visited[i][j] == 0 :
+            if cnt == 0 :
+                check(i,j,bf[i][j],af[i][j])
+                cnt += 1
+            else :
+                print("NO")
+                exit(0)
+print("YES")
