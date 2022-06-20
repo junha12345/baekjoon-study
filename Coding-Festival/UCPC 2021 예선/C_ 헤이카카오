@@ -1,0 +1,15 @@
+import sys
+input = sys.stdin.readline
+
+a, d, k = map(int, input().split())
+ans = 0
+tmp = 1
+idx = a
+d /= 100
+while d<1 :
+    ans += a*d*tmp
+    a += idx
+    tmp *= 1-d
+    d *= (1+(k/100))
+ans += a*tmp
+print(ans)
