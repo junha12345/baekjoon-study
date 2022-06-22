@@ -1,0 +1,10 @@
+import sys
+input = sys.stdin.readline
+
+# sol = 스키시간 최대화 리프트는 적용x
+# sol = dp를 통해 도착점까지의 최댓값 구한후 리프트 타서 시간추가고려
+
+n, m, k, s, t = map(int, input().split())
+for _ in range(m) :
+    # 코스
+    a, b, t = map(int, input().split())
