@@ -1,0 +1,53 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+n, m, l = map(int, input().split())
+graph = []
+visited = [[0]*m for _ in range(n)]
+for _ in range(n) :
+    graph.append(list(input().rstrip()))
+name = list(input().rstrip())
+ndic = dict()
+for i in name :
+    ndic.setdefault(i, 0)
+    ndic[i] += 1
+dic = dict()
+for i in range(n) :
+    for j in range(m) :
+        dic.setdefault(graph[i][j], 0)
+        dic[graph[i][j]] += 1
+ans = INF
+for i in ndic.keys() :
+    if ans>(dic[i]//ndic[i]) : ans = (dic[i]//ndic[i])
+ans2 = ans
+idx = []
+cnt = 0
+while True :
+    flag = 0
+    for i in range(n) :
+        for j in range(m) :
+            if graph[i][j] == name[cnt] and visited[i][j] == 0 :
+                visited[i][j] = 1
+                cnt += 1
+                if cnt == l :
+                    cnt%=l
+                    ans-=1
+                for y in range(j) :
+                    idx.append("R")
+                for x in range(i) :
+                    idx.append("D")
+                idx.append("P")
+                for y in range(j) :
+                    idx.append("L")
+                for x in range(i) :
+                    idx.append("U")
+                flag = 1
+                break
+        if flag == 1 : break
+    if ans == 0 : break
+for i in range(m-1) : idx.append("R")
+for j in range(n-1) : idx.append("D")
+print(ans2, len(idx))
+for i in idx :
+    print(i, end='')
