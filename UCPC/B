@@ -1,0 +1,29 @@
+import sys
+input = sys.stdin.readline
+
+def ccw(p1,p2,p3) :
+    x1, y1 = p1[0], p1[1]
+    x2, y2 = p2[0], p2[1]
+    x3, y3 = p3[0], p3[1]
+    idx = (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1)
+    if idx>0 : return 1 #시 반
+    elif idx == 0 : return 0 #직선
+    else : return -1 #시
+
+n = int(input())
+ans = 0
+nlist = [[] for _ in range(n)]
+for i in range(n) :
+    a, b, c, d, e = map(int, input().split())
+    nlist[i].append([a,b])
+    nlist[i].append([c,d])
+    nlist[i].append(e)
+nlist.sort(key=lambda x: -x[2])
+for i in range(n) :
+    cnt = 0
+    for j in range(i) :
+        if ccw(nlist[i][0],nlist[i][1],nlist[j][0])*ccw(nlist[i][0],nlist[i][1],nlist[j][1])<0 \
+            and ccw(nlist[j][0],nlist[j][1],nlist[i][0])*ccw(nlist[j][0],nlist[j][1],nlist[i][1])<0 :
+            cnt += 1
+    ans += (cnt+1)*nlist[i][2]
+print(ans)
