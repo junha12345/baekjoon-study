@@ -1,0 +1,24 @@
+import sys
+from datetime import datetime
+input = sys.stdin.readline
+
+n = int(input())
+if n == 0 :
+    print(0)
+    exit(0)
+nlist = []
+under = 0
+upper = 0
+for _ in range(n) :
+    a, b, c = input().split(' ')
+    y, m, d = a.split('/')
+    ho, mi, sc = b.split(':')
+    nlist.append([int(y), int(m), int(d), int(ho), int(mi), int(sc), int(c)])
+rdate = datetime(nlist[-1][0], nlist[-1][1], nlist[-1][2], nlist[-1][3], nlist[-1][4], nlist[-1][5])
+for i in range(n) :
+    date = datetime(nlist[i][0], nlist[i][1], nlist[i][2], nlist[i][3], nlist[i][4], nlist[i][5])
+    year = ((rdate-date).days+((rdate-date).seconds/3600)/24)/365
+    p = max((0.5)**(year),(0.9)**(n-i-1))
+    under += p
+    upper += p*nlist[i][6]
+print(round(upper/under))
