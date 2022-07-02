@@ -1,0 +1,8 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+p = n//4
+for i in range(p) :
+    print("long", end=' ')
+print("int")
