@@ -1,0 +1,12 @@
+import sys
+input = sys.stdin.readline
+
+n, m, r = map(int, input().split()) # 지역, 수색범위, 길
+items = list(map(int, input().split()))
+graph = [[] for _ in range(n+1)]
+for _ in range(r) :
+    a, b, dist = map(int, input().split())
+    graph[a].append([b,dist])
+    graph[b].append([a,dist])
+
+def dfs()
