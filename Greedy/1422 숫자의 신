@@ -1,0 +1,28 @@
+import sys
+input = sys.stdin.readline
+
+n,m = map(int, input().split())
+nlist = []
+nmax = -1
+for i in range(n) :
+    a = int(input())
+    nlist.append(str(a))
+    if a>nmax : nmax = a
+nums = [[] for _ in range(11)]
+for i in nlist :
+    idx = len(i)
+    idx2 = 10%idx
+    nums[int(i[0])].append([int(i*(10//idx)+i[:idx2]),i])
+for i in range(11) :
+    nums[i].sort(key=lambda x: -x[0])
+ans = ""
+chance = 1
+for i in range(10,-1,-1) :
+    for k in nums[i] :
+        if str(nmax) == k[1] and chance == 1 :
+            chance -= 1
+            for j in range(m-n) :
+                ans += k[1]
+        ans += k[1]
+if ans[0] == "0" : print(0)
+else : print(ans)
