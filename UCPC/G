@@ -3,69 +3,44 @@ input = sys.stdin.readline
 
 n, m = map(int, input().split())
 nlist = [1]*(2*n+1)
-game = []
 block = []
+ans = dict()
 for _ in range(m) :
     a, b, c = map(str, input().split(' '))
     nlist[int(c)] = 0
-    game.append([a,int(c)])
-    block.append(c)
-ans = []
-turns = ["A","B"] # 0->A , 1->B
-turn = 1
-idx = 1
-flag = 0
-ans.append([game[0][1]])
-while True :
-    if turns[turn] == game[idx][0] :
-        ans.append([game[idx][1]])
-        turn += 1
-        turn %= 2
-        idx += 1
-    else :
-        for j in range(game[idx-1][1],n*2+1) :
-            if nlist[j] == 1 :
-                nlist[j] = 0
-                ans[idx-1].append(j)
-                turn += 1
-                turn %= 2
-                flag = 1
-                break
-        if flag == 0 :
-            print("NO")
-            exit(0)
-    flag = 0
-    if idx == len(game) : break
-left = []
-for i in range(1,n*2+1) :
-    if nlist[i] == 1 :
-        left.append(i)
-for i in left[:-1] :
-    if flag == 1 :
-        ans[j].append(i)
-        flag = 0
-        continue
-    for j in range(0,len(ans)-1) :
-        if ans[j][-1]<i :
-            ans[j].append(i)
-            flag = 1
-            break
-    if flag == 0 : 
-        print("NO")
-        exit(0)
-if ans[-1][-1]<left[-1] :
-    ans[-1].append(left[-1])
-else :
+    block.append([a,int(c)])
+    ans.setdefault(int(c),[])
+if 1 not in ans :
     print("NO")
     exit(0)
-print(ans)
+left = []
+for i in range(n*2,0,-1) :
+    if nlist[i] == 1 :
+        left.append(i)
+check = []
+for i in range(1,m) :
+    if block[i][0]==block[i-1][0] :
+        check.append(block[i-1][1])
+a = 0
+if (len(left)-len(check))%2 != 0 :
+    check.append(block[-1][1])
+check.sort(key=lambda x: -x)
+for i in check :
+    if a>len(left)-1 or i>left[a] :
+        print("NO")
+        exit(0)
+    ans[i].append(left[a])
+    a+=1
+for i in range(a,len(left)) :
+    ans[1].append(left[i])
 print("YES")
-i = 0
-for j in range(len(ans)) :
-    if i%2 == 0 : print("A", "BLOCK", ans[j][0])
-    else : print("B", "BLOCK", ans[j][0])
+i = 1
+for j in ans :
+    ans[j].sort()
+    if i%2 == 0 : print("B BLOCK", j)
+    else : print("A BLOCK", j)
     i += 1
-    for k in ans[j][1:] :
-        if i%2 == 0 : print("A", "CHAIN", k)
-        else : print("B", "CHAIN", k)
+    for k in ans[j] :
+        if i%2 == 0 : print("B CHAIN", k)
+        else : print("A CHAIN", k)
         i += 1
