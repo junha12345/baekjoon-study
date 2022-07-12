@@ -1,0 +1,39 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+def find(x) :
+    if parent[x] == x :
+        return x
+    parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y) :
+    x = find(x)
+    y = find(y)
+    if x==y : return
+    if rank[x] > rank[y] : parent[y] = x
+    else : parent[x] = y
+
+# sol = 부모가 know에 있는수라면 진실을 알고있음 브루드포스
+n, m = map(int, input().split()) # 사람수, 파티수
+parent = [i for i in range(n+1)]
+rank = [1]*(n+1)
+know = list(map(int, input().split()))
+for i in know[1:] :
+    rank[i] = INF
+nlist = []
+cnt = 0
+for _ in range(m) :
+    check = list(map(int, input().split()))
+    for i in range(1,len(check)-1) :
+        union(check[i+1],check[i])
+    nlist.append(check)
+for i in range(m) :
+    flag = 0
+    for k in nlist[i][1:] :
+        if find(parent[k]) in know[1:] :
+            flag = 1
+            break
+    if flag == 0 : cnt += 1
+print(cnt)
