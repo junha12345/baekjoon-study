@@ -1,0 +1,47 @@
+import sys
+input = sys.stdin.readline
+
+r,c,t = map(int, input().split())
+graph = []
+memory = [[0]*c for _ in range(r)]
+for i in range(r) :
+    graph.append(list(map(int, input().split())))
+for i in range(r) :
+    if graph[i][0] == -1 :
+        x = i
+for _ in range(t) :
+    for i in range(r) :
+        for j in range(c) :
+            if graph[i][j]>0 :
+                memory[i][j] = graph[i][j]
+                if i>0 :
+                    memory[i-1][j] += graph[i][j]//5
+                    memory[i][j] -= graph[i][j]//5
+                if j>0 :
+                    memory[i][j-1] += graph[i][j]//5
+                    memory[i][j] -= graph[i][j]//5
+                if i<r-1 :
+                    memory[i+1][j] += graph[i][j]//5
+                    memory[i][j] -= graph[i][j]//5
+                if j<c-1 :
+                    memory[i][j+1] += graph[i][j]//5
+                    memory[i][j] -= graph[i][j]//5
+    for i in range(r) :
+        print(memory[i])
+    for i in range(x-1,0,-1) : memory[i][0] = memory[i-1][0]
+    for i in range(c-1) : memory[0][i] = memory[0][i+1]
+    for i in range(x-1) : memory[i][c-1] = memory[i+1][c-1]
+    for i in range(c-1,1,-1) : memory[x][i] = memory[x][i-1]
+    memory[x][1] = 0
+    for i in range(x+2,r,-1) : memory[i][0] = memory[i+1][0]
+    for i in range(c-1) : memory[r-1][i] = memory[r-1][i+1]
+    for i in range(r-1,x+1,-1) : memory[i][c-1] = memory[i-1][c-1]
+    for i in range(c-1,1,-1) : memory[x+1][i] = memory[x+1][i-1]
+    memory[x+1][1] = 0
+ans = 0
+for i in range(r) :
+    ans += sum(graph[i])
+print()
+for i in range(r) :
+    print(memory[i])
+print(ans)
