@@ -1,0 +1,23 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+t = int(input())
+for _ in range(t) :
+    cnt = dict()
+    x, k = map(str, input().split())
+    k = int(k)
+    y = list(map(int, x.rstrip()))
+    print(y)
+    for i in range(10) : cnt.setdefault(i,0)
+    for i in y : cnt[i] += 1
+    cnt = dict(sorted(cnt.items()))
+    print(cnt)
+    nmax, nmin = 0, INF
+    for i in range(10) :
+        if cnt[i]!=0 and cnt[i]>nmax : nmax = cnt[i]
+        if cnt[i]!=0 and cnt[i]<nmin : nmin = cnt[i]
+    print(nmax, nmin)
+    if nmax-nmin<=k : print(x)
+    else :
+        print("no")
