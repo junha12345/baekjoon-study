@@ -1,0 +1,17 @@
+import sys
+input = sys.stdin.readline
+
+# jhnah917, jhnan917
+# 1 -> r,g
+# 2 -> b,g
+n, m = map(int, input().split())
+rd, gn, be = 0, 0, 0
+for _ in range(n) :
+    a, b = map(int, input().split())
+for _ in range(m) :
+    a, b, c = input().split()
+    if c == "R" : rd += 1
+    elif c == "G" : gn += 1
+    else : be += 1
+if rd+gn%2>be : print("jhnah917")
+else : print("jhnan917")
