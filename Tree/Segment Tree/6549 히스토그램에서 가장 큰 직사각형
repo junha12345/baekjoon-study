@@ -37,17 +37,17 @@ def ans(s,e) :
         idx = ans(s,m-1)
         answer = max(idx,answer)
     if m+1<=e :
-        idx = ans(m+1,e)
-        answer = max(idx,answer)
+        idx2 = ans(m+1,e)
+        answer = max(idx2,answer)
     return answer
 
 while True :
     nlist = list(map(int, input().split()))
-    n = len(nlist)
-    h = ceil(log2(n)+1e-9)
+    n = nlist.pop(0)
+    if n == 0 :
+        break
+    h = ceil(log2(n))
     size = 1 << (h+1)
     tree = [0]*size
-    if nlist[0]==0 and n==1 :
-        break
     init(1,0,n-1)
     print(ans(0,n-1))
