@@ -1,0 +1,23 @@
+def find(x, parent) :
+    if parent[x] == x :
+        return x
+    parent[x] = find(parent[x], parent)
+    return parent[x]
+
+def union(x, y, parent, rank) :
+    x = find(x, parent)
+    y = find(y, parent)
+    if x==y : return
+    if rank[x] > rank[y] : parent[y] = x # dept가 큰쪽으로 추가
+    else : parent[x] = y
+    
+def solution(n, costs):
+    ans = 0
+    parent = [i for i in range(n)]
+    rank = [0]*n
+    costs.sort(key=lambda x: x[2])
+    for x,y,cost in costs :
+        if find(x,parent) != find(y,parent) :
+            union(x,y,parent,rank)
+            ans += cost
+    return ans
