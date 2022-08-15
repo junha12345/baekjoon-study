@@ -1,6 +1,7 @@
 import sys
+from math import *
 input = sys.stdin.readline
 
 n,m,a,k = map(int, input().split())
-if a-k>=n : print(n,(a-k)//m+2)
-else : print(a-k+1,(a-k)//m+2)
+if a-k>=n-1 : print(n,ceil((a-k)//m)+1)
+else : print(a-k+1,ceil((a-k)//m)+1)
