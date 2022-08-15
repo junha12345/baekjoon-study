@@ -1,0 +1,5 @@
+import sys
+input = sys.stdin.readline
+
+n,m,a,k = map(int, input().split())
+print(n,(a-k)//m+2)
