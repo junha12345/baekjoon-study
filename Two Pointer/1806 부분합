@@ -1,0 +1,19 @@
+import sys
+input = sys.stdin.readline
+
+n, s = map(int, input().split())
+ans = 100001
+nlist = list(map(int, input().split()))
+cnt = nlist[0]
+start, end = 0,0 
+while True :
+    if cnt>=s :
+        cnt -= nlist[start]
+        ans = min(ans, end-start+1)
+        start += 1
+    else :
+        end += 1
+        if end == n : break
+        cnt += nlist[end]
+if ans == 100001 : print(0)
+else : print(ans)
