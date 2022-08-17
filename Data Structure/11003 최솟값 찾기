@@ -1,0 +1,11 @@
+from collections import deque
+n, l = map(int, input().split())
+nlist = list(map(int, input().split()))
+ans = []
+q = deque()
+for i in range(n) :
+    while q and q[-1][0]>nlist[i] : q.pop()
+    while q and q[0][1]<i-l+1 : q.popleft()
+    q.append([nlist[i],i])
+    ans.append(q[0][0])
+print(*ans)
