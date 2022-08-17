@@ -1,0 +1,40 @@
+# sol = 분필이 많은 순서대로(idx는 저장한상태)
+# 정렬 후 순차적으로 선택, union-find를 통해 연결될시 답에 저장 끝까지, ans = min(~) 
+# O(n) 풀이가능?
+
+import sys
+input = sys.stdin.readline
+
+def find(x) :
+    if parent[x] == x :
+        return x
+    parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y) :
+    x = find(x)
+    y = find(y)
+    if x==y : return
+    if rank[x] > rank[y] : x,y = y,x
+    parent[x] = y
+    if rank[x] == rank[y] :
+        rank[y] += 1
+        
+n = int(input())
+nlist = []
+for i, x in enumerate(list(map(int, input().split())), start=1) :
+    nlist.append([x,i])
+nlist.sort(key=lambda x: -x[0])
+graph = [[] for _ in range(n+1)]
+parent = [i for i in range(n+1)]
+rank = [0]*(n+1)
+for _ in range(n-1) :
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+ans = []
+cnt, idx = nlist[0]
+ans.append(cnt)
+for x, i in nlist[1:] :
+    
+print(max(ans))
