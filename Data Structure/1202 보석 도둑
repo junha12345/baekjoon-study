@@ -1,0 +1,23 @@
+import sys
+import heapq
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+dia = [] # 무게,가격
+bag = []
+ans = 0
+for _ in range(n) :
+    m, v = map(int, input().split())
+    heapq.heappush(dia,[m,v])
+for _ in range(k) :
+    bag.append(int(input()))
+bag.sort()
+idx = []
+for i in bag :
+    while dia and i>=dia[0][0] :
+        heapq.heappush(idx, -heapq.heappop(dia)[1])
+    if idx :
+        ans += -1*heapq.heappop(idx)
+    elif not dia : break
+    # 작은 가방에 들어가는것은 그보다 큰 가방에도 들어간다는 것을 이용함
+print(ans)
