@@ -1,0 +1,29 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def init(node, s, e) :
+    if s == e :
+        tree[node] = nlist[s]
+        return tree[node]
+    mid = (s+e)//2
+    tree[node] = min(init(node*2,s,mid),init(node*2+1,mid+1,e))
+    return tree[node]
+
+def query(node, s, e, l, r) :
+    return
+
+n,q = map(int, input().split())
+nlist = []
+for _ in range(n) :
+    nlist.append(int(input()))
+h = ceil(log2(n))
+size = 2**(h+1)
+tree = [0]*(size)
+init(1,0,n-1)
+for _ in range(q) :
+    x, y = map(int, input().split())
+    '''
+    print(query(node, 0, n-1, x, y)
+    '''
+print(tree)
