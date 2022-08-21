@@ -33,6 +33,6 @@ for _ in range(t) :
     while maxlist and not check[maxlist[0][1]] :
         heapq.heappop(maxlist)
     while minlist and not check[minlist[0][1]] :
-        heapq.heappop(mainlist)
+        heapq.heappop(minlist)
     if not minlist or not maxlist : print("EMPTY")
     else : print(-heapq.heappop(maxlist)[0], heapq.heappop(minlist)[0])
