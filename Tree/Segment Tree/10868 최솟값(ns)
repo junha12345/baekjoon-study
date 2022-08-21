@@ -11,7 +11,10 @@ def init(node, s, e) :
     return tree[node]
 
 def query(node, s, e, l, r) :
-    return
+    if r<s or e<l : return 1000000001
+    if l<=s and e<=r : return tree[node]
+    mid = (s+e)//2
+    return min(query(node*2,s,mid,l,r),query(node*2+1,mid+1,e,l,r))
 
 n,q = map(int, input().split())
 nlist = []
@@ -23,7 +26,4 @@ tree = [0]*(size)
 init(1,0,n-1)
 for _ in range(q) :
     x, y = map(int, input().split())
-    '''
-    print(query(node, 0, n-1, x, y)
-    '''
-print(tree)
+    print(query(1, 0, n-1, x, y))
