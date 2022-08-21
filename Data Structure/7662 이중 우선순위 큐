@@ -1,0 +1,38 @@
+import sys
+import heapq
+input = sys.stdin.readline
+
+# sol = 최대저장장소, 최소저장장소 따로구현 -> 실패
+# sol = 하나의 최대힙만구현, 최대삭제시 그냥 pop, 최소 삭제시 nlargest로 len-1만큼 삭제
+# sol ----> min, max 힙 구현, 삭제된것을 알수있는 리스트를 통해 삭제된 원소 출력방지
+t = int(input())
+for _ in range(t) :
+    n = int(input())
+    minlist, maxlist = [],[] # I N = N 삽입, D 1 = 최댓값 삭제, D -1 = 최솟값 삭제
+    check = [False]*(1000001)
+    for i in range(n) :
+        q, x = input().split()
+        x=int(x)
+        if q == "I" :
+            heapq.heappush(minlist, (x,i))
+            heapq.heappush(maxlist, (-x,i))
+            check[i] = True
+        else :
+            if x == 1 :
+                while maxlist and not check[maxlist[0][1]] :
+                    heapq.heappop(maxlist)
+                if maxlist :
+                    check[maxlist[0][1]] = False
+                    heapq.heappop(maxlist)
+            else :
+                while minlist and not check[minlist[0][1]] :
+                    heapq.heappop(minlist)
+                if minlist :
+                    check[minlist[0][1]] = False
+                    heapq.heappop(minlist)
+    while maxlist and not check[maxlist[0][1]] :
+        heapq.heappop(maxlist)
+    while minlist and not check[minlist[0][1]] :
+        heapq.heappop(mainlist)
+    if not minlist or not maxlist : print("EMPTY")
+    else : print(-heapq.heappop(maxlist)[0], heapq.heappop(minlist)[0])
