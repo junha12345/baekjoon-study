@@ -26,4 +26,4 @@ tree = [0]*(size)
 init(1,0,n-1)
 for _ in range(q) :
     x, y = map(int, input().split())
-    print(query(1, 0, n-1, x, y))
+    print(query(1, 0, n-1, x-1, y-1))
