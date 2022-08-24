@@ -1,0 +1,43 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def init(node, s, e) :
+    if s == e :
+        tree[node] = nlist[s]
+        return tree[node]
+    mid = (s+e)//2
+    tree[node] = init(node*2,s,mid)*init(node*2+1,mid+1,e)
+    return tree[node]
+
+def query(node, s, e, l, r) :
+    if r<s or e<l : return 1
+    if l<=s and e<=r : return tree[node]
+    mid = (s+e)//2
+    return (query(node*2,s,mid,l,r)*query(node*2+1,mid+1,e,l,r))%(10**9+7)
+
+def change(node, s, e, diff, idx) :
+    if idx<s or e<idx : return
+    if s==e :
+        tree[node] = diff
+    else :
+        mid = (s+e)//2
+        change(node*2, s, mid, diff, idx)
+        change(node*2+1, mid+1, e, diff, idx)
+        tree[node] = tree[node*2]*tree[node*2+1]
+
+n,m,k = map(int, input().split())
+nlist = []
+for _ in range(n) :
+    nlist.append(int(input()))
+h = ceil(log2(n))
+size = 2**(h+1)
+tree = [0]*(size)
+init(1,0,n-1)
+for _ in range(m+k) :
+    z, x, y = map(int, input().split())
+    if z == 1 : # x번째 수 y로
+        nlist[x-1] = y
+        change(1, 0, n-1, y, x-1)
+    else :
+        print(query(1, 0, n-1, x-1, y-1))
