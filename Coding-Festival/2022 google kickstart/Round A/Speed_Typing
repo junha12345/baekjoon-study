@@ -1,0 +1,16 @@
+import sys
+input = sys.stdin.readline
+
+def sol() :
+    I = input().strip()
+    P = input().strip()
+    cnt,k = 0, 0
+    for i in range(len(P)) :
+        if k<len(I) and I[k]==P[i] :
+            k += 1
+        else :
+            cnt += 1
+    return cnt if k==len(I) else "IMPOSSIBLE"
+    
+for t in range(int(input())) :
+    print("Case #%d: %s" % (t+1, sol()))
