@@ -1,0 +1,23 @@
+import sys
+input = sys.stdin.readline
+# 추가할 수 보다 큰게 오른쪽이면 추가
+# 예외 = 0
+
+def sol() :
+    nlist = input().strip()
+    num = 0
+    for i in range(len(nlist)) :
+        num += int(nlist[i])%9
+    if num%9==0 : num = 0
+    else : num = 9-num%9
+    idx = -1
+    if num == 0 : k=1
+    else : k=0
+    for i in range(k, len(nlist)) :
+        if int(nlist[i])>num :
+            idx = i
+            break
+    return nlist[:idx]+str(num)+nlist[idx:] if idx!=-1 else nlist[:]+str(num)
+    
+for t in range(int(input())) :
+    print("Case #%d: %s" % (t+1, sol()))
