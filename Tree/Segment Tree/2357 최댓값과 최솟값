@@ -1,0 +1,45 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def min_init(node, s, e) :
+    if s == e :
+        min_tree[node] = nlist[s]
+        return min_tree[node]
+    mid = (s+e)//2
+    min_tree[node] = min(min_init(node*2,s,mid),min_init(node*2+1,mid+1,e))
+    return min_tree[node]
+
+def max_init(node, s, e) :
+    if s == e :
+        max_tree[node] = nlist[s]
+        return max_tree[node]
+    mid = (s+e)//2
+    max_tree[node] = max(max_init(node*2,s,mid), max_init(node*2+1,mid+1,e))
+    return max_tree[node]
+
+def min_query(node, s, e, l, r) :
+    if r<s or e<l : return 1000000001
+    if l<=s and e<=r : return min_tree[node]
+    mid = (s+e)//2
+    return min(min_query(node*2,s,mid,l,r),min_query(node*2+1,mid+1,e,l,r))
+
+def max_query(node, s, e, l, r) :
+    if r<s or e<l : return -1000000001
+    if l<=s and e<=r : return max_tree[node]
+    mid = (s+e)//2
+    return max(max_query(node*2,s,mid,l,r),max_query(node*2+1,mid+1,e,l,r))
+
+n,q = map(int, input().split())
+nlist = []
+for _ in range(n) :
+    nlist.append(int(input()))
+h = ceil(log2(n))
+size = 2**(h+1)
+min_tree = [0]*(size)
+max_tree = [0]*(size)
+min_init(1,0,n-1)
+max_init(1,0,n-1)
+for _ in range(q) :
+    x, y = map(int, input().split())
+    print(min_query(1, 0, n-1, x-1, y-1), max_query(1, 0, n-1, x-1, y-1))
