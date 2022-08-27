@@ -2,7 +2,7 @@ import sys
 from math import *
 input = sys.stdin.readline
 # nlist[i]번째를 업데이트 한 후 nlist[i]~n-1 까지 합 만큼 +
-
+# 시간초과 --> 좌표압축
 def update(node, s, e, target) :
     if target<s or e<target :
         return tree[node]
