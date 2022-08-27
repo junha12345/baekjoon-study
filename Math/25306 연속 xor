@@ -1,0 +1,12 @@
+import sys
+input = sys.stdin.readline
+
+def sol(num, idx) :
+    if idx == 0 : return num
+    elif idx == 1 : return 1
+    elif idx == 2 : return num+1
+    else : return 0
+
+a, b = map(int, input().split())
+ans = sol(b,b%4)^sol(a-1,(a-1)%4)
+print(ans)
