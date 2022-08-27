@@ -1,0 +1,33 @@
+import sys
+from math import *
+input = sys.stdin.readline
+# nlist[i]번째를 업데이트 한 후 nlist[i]~n-1 까지 합 만큼 +
+
+def update(node, s, e, target) :
+    if target<s or e<target :
+        return tree[node]
+    if s == e :
+        tree[node] += 1
+        return tree[node]
+    mid = (s+e)//2
+    tree[node] = update(node*2,s,mid,target) + update(node*2+1,mid+1,e,target)
+    return tree[node]
+
+def query(node, s, e, l, r) :
+    if r<s or e<l : return 0
+    if l<=s and e<=r : return tree[node]
+    mid = (s+e)//2
+    return query(node*2,s,mid,l,r) + query(node*2+1,mid+1,e,l,r)
+
+n = int(input())
+nums = list(map(int, input().split()))
+nums2 = list(sorted(set(nums)))
+dic = {nums2[i]:i for i in range(len(nums2))}
+h = ceil(log2(n))
+size = 2**(h+1)
+tree = [0]*(size)
+ans = 0
+for i in range(n) :
+    update(1,0,n-1,dic[nums[i]])
+    ans += query(1,0,n-1,dic[nums[i]]+1,n-1)
+print(ans)
