@@ -18,8 +18,8 @@ INF = int(1e9)
 
 def sol(x, y) :
     z = []
-    z.append(max(x[0],x[2]+y[0]))
-    z.append(max(y[1],y[2]+x[1]))
+    z.append(max(x[0],x[3]+y[0]))
+    z.append(max(y[1],y[3]+x[1]))
     z.append(max(x[2],y[2],x[1]+y[0]))
     z.append(x[3]+y[3])
     return z
