@@ -1,0 +1,64 @@
+import sys
+from math import *
+input = sys.stdin.readline
+INF = int(1e9)
+# 연속된 부분합의 최댓값을 구하기
+# C = 0 -> 부분합 MAX값
+# C != 0 -> 수열의 A번째 값을 B로 교체
+
+# 각 노드에 4가지 값을 저장
+# lval = 왼쪽값을 포함하는 최대 부분합
+# rval = 오른쪽값을 포함하는 최대 부분합
+# val = 구간의 최대 부분합
+# all = 구간의 전체합
+# x_lval = max(l_lva, l_all+r_lval)
+# x_rval = max(r_rval, r_all+l_rval)
+# x_val = max(l_val,r_val,l_rval+r_lval)
+# x_all = l_all+r_all
+
+def sol(x, y) :
+    z = []
+    z.append(max(x[0],x[2]+y[0]))
+    z.append(max(y[1],y[2]+x[1]))
+    z.append(max(x[2],y[2],x[1]+y[0]))
+    z.append(x[3]+y[3])
+    return z
+
+def update(node, s, e, val, idx) :
+    if idx<s or e<idx :
+        return tree[node]
+    if s == e :
+        tree[node] = [val, val, val, val]
+        return tree[node]
+    mid = (s+e)//2
+    a = update(node*2,s,mid,val,idx)
+    b = update(node*2+1,mid+1,e,val,idx)
+    tree[node] = sol(a, b)
+    return tree[node]
+
+def query(node, s, e, x, y) :
+    if e<x or s>y :
+        tree[node] = [-INF,-INF,-INF,0]
+        return tree[node]
+    if x<=s and e<=y :
+        return tree[node]
+    mid = (s+e)//2
+    a = query(node*2,s,mid,x,y)
+    b = query(node*2+1,mid+1,e,x,y)
+    return sol(a,b)
+
+n, q, u, v = map(int, input().split())
+nlist = list(map(int, input().split()))
+h = ceil(log2(n))
+size = 1 << (h+1)
+tree = [[-INF,-INF,-INF,0] for _ in range(size)] # l, r, val, all
+for i in range(n) :
+    update(1,0,n-1,u*nlist[i]+v,i)
+for _ in range(q) :
+    c, x, y = map(int, input().split())
+    if c == 0 :
+        ans = query(1,0,n-1,x-1,y-1)
+        print(ans[2]-v)
+    else :
+        nlist[x-1] = y
+        update(1,0,n-1,u*y+v,x-1)
