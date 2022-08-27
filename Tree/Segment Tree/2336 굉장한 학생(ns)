@@ -3,12 +3,14 @@ from math import *
 input = sys.stdin.readline
 # 1번째 기준으로 정렬, 2번째 값 idx 3번째 값 i 라고할때 segment tree[1~idx] 증
 # min값이  i보다 클시 굉장한학생
-def init(node, s, e) :
+def update(node, s, e, target, val) :
+    if target<s or e<target :
+        return tree[node]
     if s == e :
-        tree[node] = seg[s]
+        tree[node] = val
         return tree[node]
     mid = (s+e)//2
-    tree[node] = min(init(node*2,s,mid),init(node*2+1,mid+1,e))
+    tree[node] = min(update(node*2,s,mid,target,val),update(node*2+1,mid+1,e,target,val))
     return tree[node]
 
 def query(node, s, e, l, r) :
@@ -21,21 +23,15 @@ n = int(input())
 nlist = [[] for _ in range(n)]
 for _ in range(3) :
     nums = list(map(int, input().split()))
-    for i, j in enumerate(nums) :
-        nlist[i].append(j)
-seg = []
-nlist.sort(key=lambda x: x[1])
-for i in nlist :
-    seg.append(i[2])
+    for i, j in enumerate(nums, start=1) :
+        nlist[j-1].append(i)
 nlist.sort(key=lambda x: x[0])
-print(nlist)
-print(seg)
 h = ceil(log2(n))
 size = 2**(h+1)
-tree = [0]*(size)
+tree = [500001]*(size)
 ans = 0
-init(1,0,n-1)
-for i in range(10) :
-    if nlist[i][2]==query(1,0,n-1,0,nlist[i][1]-1) :
+for i in range(n) :
+    if nlist[i][2]<query(1,0,n-1,0,nlist[i][1]-1) :
         ans += 1
+    update(1,0,n-1,nlist[i][1]-1,nlist[i][2])
 print(ans)
