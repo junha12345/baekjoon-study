@@ -1,0 +1,60 @@
+import sys
+from math import *
+input = sys.stdin.readline
+INF = int(1e9)
+
+def sol(x, y) :
+    z = []
+    z.append(max(x[0],x[3]+y[0]))
+    z.append(max(y[1],y[3]+x[1]))
+    z.append(max(x[2],y[2],x[1]+y[0]))
+    z.append(x[3]+y[3])
+    return z
+
+def init(node, s, e) :
+    if s == e :
+        tree[node] = [u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v]
+        return tree[node]
+    else :
+        mid = (s+e)//2
+        a = init(node*2,s,mid)
+        b = init(node*2+1,mid+1,e)
+        tree[node] = sol(a,b)
+        return tree[node]
+
+def update(node, s, e, idx) :
+    if idx<s or e<idx :
+        return tree[node]
+    if s == e :
+        tree[node] = [u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v]
+        return tree[node]
+    mid = (s+e)//2
+    a = update(node*2,s,mid,idx)
+    b = update(node*2+1,mid+1,e,idx)
+    tree[node] = sol(a, b)
+    return tree[node]
+
+def query(node, s, e, x, y) :
+    if e<x or s>y :
+        return [-INF,-INF,-INF,0]
+    if x<=s and e<=y :
+        return tree[node]
+    mid = (s+e)//2
+    a = query(node*2,s,mid,x,y)
+    b = query(node*2+1,mid+1,e,x,y)
+    return sol(a,b)
+
+n, q, u, v = map(int, input().split())
+nlist = list(map(int, input().split()))
+h = ceil(log2(n))
+size = 1 << (h+1)
+tree = [[-INF,-INF,-INF,0] for _ in range(size)] # l, r, val, all
+init(1,0,n-1)
+for _ in range(q) :
+    c, x, y = map(int, input().split())
+    if c == 0 :
+        ans = query(1,0,n-1,x-1,y-1)
+        print(ans[2]-v)
+    else :
+        nlist[x-1] = y
+        update(1,0,n-1,x-1)
