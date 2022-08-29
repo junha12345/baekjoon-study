@@ -24,22 +24,32 @@ def sol(x, y) :
     z.append(x[3]+y[3])
     return z
 
-def update(node, s, e, val, idx) :
+def init(node, s, e) :
+    if s == e :
+        tree[node] = [u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v]
+        return tree[node]
+    else :
+        mid = (s+e)//2
+        a = init(node*2,s,mid)
+        b = init(node*2+1,mid+1,e)
+        tree[node] = sol(a,b)
+        return tree[node]
+
+def update(node, s, e, idx) :
     if idx<s or e<idx :
         return tree[node]
     if s == e :
-        tree[node] = [val, val, val, val]
+        tree[node] = [u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v,u*nlist[s]+v]
         return tree[node]
     mid = (s+e)//2
-    a = update(node*2,s,mid,val,idx)
-    b = update(node*2+1,mid+1,e,val,idx)
+    a = update(node*2,s,mid,idx)
+    b = update(node*2+1,mid+1,e,idx)
     tree[node] = sol(a, b)
     return tree[node]
 
 def query(node, s, e, x, y) :
     if e<x or s>y :
-        tree[node] = [-INF,-INF,-INF,0]
-        return tree[node]
+        return [-INF,-INF,-INF,0]
     if x<=s and e<=y :
         return tree[node]
     mid = (s+e)//2
@@ -52,8 +62,7 @@ nlist = list(map(int, input().split()))
 h = ceil(log2(n))
 size = 1 << (h+1)
 tree = [[-INF,-INF,-INF,0] for _ in range(size)] # l, r, val, all
-for i in range(n) :
-    update(1,0,n-1,u*nlist[i]+v,i)
+init(1,0,n-1)
 for _ in range(q) :
     c, x, y = map(int, input().split())
     if c == 0 :
@@ -61,4 +70,4 @@ for _ in range(q) :
         print(ans[2]-v)
     else :
         nlist[x-1] = y
-        update(1,0,n-1,u*y+v,x-1)
+        update(1,0,n-1,x-1)
