@@ -1,0 +1,60 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def init(node, s, e) :
+    if s == e :
+        tree[node] = nlist[s]
+        return tree[node]
+    mid = (s+e)//2
+    tree[node] = init(node*2,s,mid)^init(node*2+1,mid+1,e)
+    return tree[node]
+
+def query(node, s, e, l, r) : # 구하고자 하는 합 노드탐색
+    propagation(node,s,e)
+    if l > e or r < s :
+        return 0
+    if l <= s and e <= r :
+        return tree[node]
+    mid = (s+e)//2
+    return query(node*2,s,mid,l,r)^query(node*2+1,mid+1,e,l,r)
+
+def update(node, s, e, l, r, diff) : # 차이만큼 업데이트
+    propagation(node,s,e)
+    if l>e or r<s :
+        return 0
+    if l<=s and e<=r :
+        tree[node] ^= diff*((e-s+1)%2) # 자식의 수가 짝수일시 갱신x
+        if s != e :
+            lazy[node*2] ^= diff
+            lazy[node*2+1] ^= diff
+        return
+    mid = (s+e)//2
+    update(node*2,s,mid,l,r,diff)
+    update(node*2+1,mid+1,e,l,r,diff)
+    tree[node] = tree[node*2]^tree[node*2+1]
+
+def propagation(node, s, e) : # 업데이트 해야할 노드인지 판단
+    if lazy[node] != 0 :
+        tree[node] ^= lazy[node]*((e-s+1)%2)
+        if s != e :
+            lazy[node*2] ^= lazy[node]
+            lazy[node*2+1] ^= lazy[node]
+        lazy[node] = 0
+
+n = int(input())
+nlist = list(map(int, input().split()))
+k = int(input())
+h = ceil(log2(n))
+size = 1 << (h+1)
+tree = [0]*(size)
+lazy = [0]*(size) # 업데이트할때 추가할 값
+init(1,0,n-1)
+for _ in range(k) :
+    c, *q = map(int, input().split())
+    if c == 1 : # i~j 까지 k xor
+        i, j, diff = q
+        update(1,0,n-1,i,j,diff)
+    else : # i~j xor 값 출력
+        i, j = q
+        print(query(1,0,n-1,i,j))
