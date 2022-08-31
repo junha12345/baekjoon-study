@@ -32,7 +32,7 @@ def update(node, s, e, l, r, diff) : # 차이만큼 업데이트
         if s != e :
             lazy[node*2] += diff
             lazy[node*2+1] += diff
-        return tree[node]
+        return
     mid = (s+e)//2
     update(node*2,s,mid,l,r,diff)
     update(node*2+1,mid+1,e,l,r,diff)
