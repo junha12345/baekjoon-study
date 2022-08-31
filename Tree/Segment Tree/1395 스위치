@@ -1,0 +1,47 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def query(node, s, e, l, r) : # 구하고자 하는 합 노드탐색
+    propagation(node,s,e)
+    if l > e or r < s :
+        return 0
+    if l <= s and e <= r :
+        return tree[node]
+    mid = (s+e)//2
+    return query(node*2,s,mid,l,r) + query(node*2+1,mid+1,e,l,r)
+
+def update(node, s, e, l, r) : # 차이만큼 업데이트
+    propagation(node,s,e)
+    if l>e or r<s :
+        return 0
+    if l<=s and e<=r :
+        tree[node] = (e-s+1)-tree[node]
+        if s != e :
+            lazy[node*2] += 1
+            lazy[node*2+1] += 1
+        return
+    mid = (s+e)//2
+    update(node*2,s,mid,l,r)
+    update(node*2+1,mid+1,e,l,r)
+    tree[node] = tree[node*2]+tree[node*2+1]
+
+def propagation(node, s, e) : # 업데이트 해야할 노드인지 판단
+    if lazy[node]%2 != 0 :
+        tree[node] = (e-s+1)-tree[node]
+        if s != e :
+            lazy[node*2] += 1
+            lazy[node*2+1] += 1
+        lazy[node] = 0
+
+n, q = map(int, input().split())
+h = ceil(log2(n))
+size = 1 << (h+1)
+tree = [0]*(size)
+lazy = [0]*(size) # 업데이트할때 추가할 값
+for _ in range(q) :
+    c, x, y = map(int, input().split())
+    if c == 1 : # 켜져있는 개수
+        print(query(1,0,n-1,x-1,y-1))
+    else : # 상태반전
+        update(1,0,n-1,x-1,y-1)
