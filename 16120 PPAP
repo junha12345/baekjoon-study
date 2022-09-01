@@ -1,0 +1,18 @@
+import sys
+input = sys.stdin.readline
+
+string = input().rstrip()
+stack = []
+idx = 0
+for i in range(len(string)) :
+    stack.append(string[i])
+    if len(stack)>=4 :
+        cnt = ""
+        for k in range(-4,0) :
+            cnt += stack[k]
+        if cnt == "PPAP" :
+            for _ in range(4) :
+                stack.pop()
+            stack.append("P")
+if stack == ["P"] : print("PPAP")
+else : print("NP")
