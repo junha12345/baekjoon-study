@@ -1,0 +1,70 @@
+import sys
+from math import *
+input = sys.stdin.readline
+INF = 1000000001
+
+def init(node, s, e) :
+    if s == e :
+        tree[node] = [nlist[s], s]
+        return tree[node]
+    mid = (s+e)//2
+    a = init(node*2,s,mid)
+    b = init(node*2+1,mid+1,e)
+    if a[0]<b[0] :
+        tree[node] = a
+    elif a[0]>b[0] :
+        tree[node] = b
+    else :
+        if a[1]<b[1] :
+            tree[node] = a
+        else :
+            tree[node] = b
+    return tree[node]
+
+def query(node, s, e, l, r) :
+    if r<s or e<l : return [INF,INF]
+    if l<=s and e<=r : return tree[node]
+    mid = (s+e)//2
+    a = query(node*2,s,mid,l,r)
+    b = query(node*2+1,mid+1,e,l,r)
+    if a[0]<b[0] :
+        return a
+    elif a[0]>b[0] :
+        return b
+    else :
+        return a if a[1]<b[1] else b
+
+def update(node, s, e, idx, diff) :
+    if idx<s or e<idx :
+        return INF
+    if s == e :
+        tree[node] = [diff,s]
+        return tree[node]
+    mid = (s+e)//2
+    update(node*2,s,mid,idx,diff)
+    update(node*2+1,mid+1,e,idx,diff)
+    a = tree[node*2]
+    b = tree[node*2+1]
+    if a[0]<b[0] :
+        tree[node] = a
+    elif a[0]>b[0] :
+        tree[node] = b
+    else :
+        if a[1]<b[1] :
+            tree[node] = a
+        else :
+            tree[node] = b
+
+n = int(input())
+nlist = list(map(int, input().split()))
+q = int(input())
+h = ceil(log2(n))
+size = 2**(h+1)
+tree = [[0,0] for _ in range(size)] # 값,idx
+init(1,0,n-1)
+for _ in range(q) :
+    c, x, y = map(int, input().split())
+    if c == 1 : # Ax를 y로
+        update(1,0,n-1,x-1,y)
+    else : # i~j중 작은값의 인덱스 작은순으로
+        print(query(1, 0, n-1, x-1, y-1)[1]+1)
