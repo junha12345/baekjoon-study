@@ -1,7 +1,8 @@
 import sys
 input = sys.stdin.readline
 
-# N장의 카드, 각각 T,U (변수, 가중치)
+# N장의 카드, 각각 T,U (변수, 증가치)
+# sol = 가중치가 가장 큰 부분을 우선적으로 증가시킴 (ex: 1->5 >>> 2->6 왼쪽이 우선)
 n, m = map(int, input().split()) # m장 사용가능
 nlist = list(map(int, input().split()))
 card = dict()
