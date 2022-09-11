@@ -1,0 +1,12 @@
+import sys
+input = sys.stdin.readline
+
+# N장의 카드, 각각 T,U (변수, 가중치)
+n, m = map(int, input().split()) # m장 사용가능
+nlist = list(map(int, input().split()))
+card = dict()
+for _ in range(n) :
+    c, d = input().split()
+    card.setdefault(c,[])
+    card[c].append(d)
+print(card)
