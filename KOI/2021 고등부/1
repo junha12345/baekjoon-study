@@ -1,0 +1,11 @@
+import sys
+input = sys.stdin.readline
+
+# N개의 지역리그, 각리그에 M개의 팀, 리그에 전체게임수 D이하, A = k*B
+# 같은리그 = A, 다른리그, B
+t = int(input())
+for _ in range(t) :
+    n,m,k,d = map(int, input().split())
+    b = d//((n*m)*(((n-1)/2)*m+(m-1)/2*k))
+    if b == 0 : print(-1)
+    else : print(int(b*((n*m)*(((n-1)/2)*m+(m-1)/2*k))))
