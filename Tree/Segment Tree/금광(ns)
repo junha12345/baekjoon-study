@@ -1,0 +1,29 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+xylist = []
+xlist = []
+ylist = []
+xdict = {}
+ydict = {}
+for _ in range(n) :
+    x,y,r = map(int, input().split())
+    xlist.append(x)
+    ylist.append(y)
+    xylist.append([x,y,r])
+idxlist = sorted(set(list(i for i in xlist)))
+xdict = {idxlist[i]:i for i in range(len(idxlist))}
+idxlist = sorted(set(list(i for i in ylist)))
+ydict = {idxlist[i]:i for i in range(len(idxlist))} 
+graph = [[0]*n for _ in range(n)]
+for x, y, r in xylist :
+    graph[ydict[y]][xdict[x]] = r
+for i in range(n) :
+    nlist = graph[i]
+    for j in range(i,n-i) :
+        if j!=i :
+            b = graph[j]
+            nlist = [nlist[k]+b[k] for k in range(len(a))]
+            
+        
