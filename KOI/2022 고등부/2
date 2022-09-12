@@ -1,0 +1,25 @@
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+nlist = list(input().rstrip())
+n = len(nlist)
+ans = 0
+aidx = deque()
+bidx = deque()
+for i in range(n) :
+    if nlist[i] == "A" :
+        aidx.append(i)
+    elif nlist[i] == "B" :
+        bidx.append(i)
+    elif nlist[i] == "C" and len(bidx)>0 :
+        deque.popleft(bidx)
+        ans += 1
+while aidx and bidx :
+    if aidx[-1]<bidx[-1] :
+        aidx.pop()
+        bidx.pop()
+        ans += 1
+    else :
+        aidx.pop()
+print(ans)
