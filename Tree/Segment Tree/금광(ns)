@@ -1,5 +1,27 @@
 import sys
+from math import *
+INF = int(1e9)
 input = sys.stdin.readline
+
+def sol(x, y) :
+    z = []
+    z.append(max(x[0],x[3]+y[0]))
+    z.append(max(y[1],y[3]+x[1]))
+    z.append(max(x[2],y[2],x[1]+y[0]))
+    z.append(x[3]+y[3])
+    return z
+
+def update(node, s, e, idx, val) :
+    if idx<s or e<idx :
+        return tree[node]
+    if s == e :
+        tree[node] = [tree[node][k]+val for k in range(4)]
+        return tree[node]
+    mid = (s+e)//2
+    a = update(node*2,s,mid,idx,val)
+    b = update(node*2+1,mid+1,e,idx,val)
+    tree[node] = sol(a, b)
+    return tree[node]
 
 n = int(input())
 xylist = []
@@ -16,14 +38,20 @@ idxlist = sorted(set(list(i for i in xlist)))
 xdict = {idxlist[i]:i for i in range(len(idxlist))}
 idxlist = sorted(set(list(i for i in ylist)))
 ydict = {idxlist[i]:i for i in range(len(idxlist))} 
-graph = [[0]*n for _ in range(n)]
-for x, y, r in xylist :
-    graph[ydict[y]][xdict[x]] = r
+#sol = xylist를 x로 정렬한 후 차례대로 tree에 업데이트, 왼쪽도 마찬가지 n^2logn
+nlist = [0]*(n)
+h = ceil(log2(n))
+size = 1 << h+1
+xylist.sort(key=lambda x: x[0])
+ans = 0
+# 같은 x좌표인 점은 동시에 update
 for i in range(n) :
-    nlist = graph[i]
-    for j in range(i,n-i) :
-        if j!=i :
-            b = graph[j]
-            nlist = [nlist[k]+b[k] for k in range(len(a))]
-            
-        
+    tree = [[0,0,0,0] for _ in range(size)]
+    if i!=0 and xylist[i][0] == xylist[i-1][0] :
+        continue
+    for j in range(i,n) :
+        update(1,0,n-1,ydict[xylist[j][1]],xylist[j][2])
+        if j != n-1 and xylist[j][0] == xylist[j+1][0] :
+            continue
+        ans = max(ans, tree[1][2])
+print(ans)
