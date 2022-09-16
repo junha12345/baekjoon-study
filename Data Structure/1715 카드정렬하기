@@ -1,0 +1,18 @@
+import sys
+from queue import PriorityQueue
+input = sys.stdin.readline
+
+n = int(input())
+nlist = PriorityQueue()
+for _ in range(n) :
+    nlist.put(int(input()))
+ans = 0
+if n == 1 :
+    print(0)
+else :
+    for _ in range(n-1) :
+        x = nlist.get()
+        y = nlist.get()
+        ans += x+y
+        nlist.put(x+y)
+    print(ans)
