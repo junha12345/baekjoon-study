@@ -1,0 +1,44 @@
+import sys
+from math import *
+INF = int(1e9)
+input = sys.stdin.readline
+
+def sol(x, y) :
+    z = [max(x[0],x[3]+y[0]),max(y[1],y[3]+x[1]),max(x[2],y[2],x[1]+y[0]),x[3]+y[3]]
+    return z
+
+def update(k, val) :
+    k += 2**h
+    tree[k] = [tree[k][i]+val for i in range(4)]
+    while k>1 :
+        k //= 2
+        tree[k] = sol(tree[2*k],tree[2*k+1])
+
+n = int(input())
+xylist = []
+xlist = []
+ylist = []
+xdict = {}
+ydict = {}
+for _ in range(n) :
+    x,y,r = map(int, input().split())
+    xlist.append(x)
+    ylist.append(y)
+    xylist.append([x,y,r])
+xlist = sorted(set(xlist))
+ylist = sorted(set(ylist))
+xdict = {xlist[i]:i for i in range(len(xlist))}
+ydict = {ylist[i]:i for i in range(len(ylist))} 
+xylist.sort(key=lambda x: x[0])
+ans = 0
+h = ceil(log2(n))
+# 같은 x좌표인 점은 동시에 update
+for i in range(n) :
+    tree = [[0,0,0,0] for _ in range(2**(h+1))]
+    if i!=0 and xylist[i][0] == xylist[i-1][0] :
+        continue
+    for j in range(i,n) :
+        update(ydict[xylist[j][1]],xylist[j][2])
+        if j == n-1 or xylist[j][0] != xylist[j+1][0] :
+            ans = max(ans, tree[1][2])
+print(ans)
