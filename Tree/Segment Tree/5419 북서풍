@@ -1,0 +1,46 @@
+import sys
+input = sys.stdin.readline
+
+def update(k) :
+    k += n
+    tree[k] += 1
+    while k>1 :
+        k //= 2
+        tree[k] = tree[2*k] + tree[2*k+1]
+
+def query(l,r) :
+    l += n
+    r += n
+    ans = 0
+    while l<r :
+        if l%2 == 1 :
+            ans += tree[l]
+            l += 1
+        if r%2 == 1 :
+            ans += tree[r-1]
+            r -= 1
+        l//=2
+        r//=2
+    return ans
+
+t = int(input())
+for _ in range(t) :
+    n = int(input())
+    xylist = []
+    xlist = []
+    ylist = []
+    xdict = {}
+    ydict = {}
+    for _ in range(n) :
+        x,y = map(int, input().split())
+        ylist.append(y)
+        xylist.append([x,y])
+    ylist = sorted(set(ylist))
+    ydict = {ylist[i]:i for i in range(len(ylist))} 
+    xylist.sort(key=lambda x: (x[0],-x[1]))
+    tree = [0]*(2*n)
+    ans = 0
+    for i in range(n) :
+        ans += query(ydict[xylist[i][1]],n)
+        update(ydict[xylist[i][1]],)
+    print(ans)
