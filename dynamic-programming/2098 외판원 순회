@@ -1,0 +1,25 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+def dfs(x, v) :
+    if v == (1<<n)-1 :
+        if graph[x][0] :
+            return graph[x][0]
+        return INF
+    if dp[x][v] != INF :
+        return dp[x][v]
+    cnt = INF
+    for i in range(1, n) :
+        if not graph[x][i] or v&(1<<i) :
+            continue
+        cnt = min(cnt, dfs(i,v|(1<<i))+graph[x][i])
+    dp[x][v] = cnt
+    return cnt
+
+n = int(input())
+dp = [[INF]*(1 << n) for _ in range(n)]
+graph = []
+for _ in range(n) :
+    graph.append(list(map(int, input().split())))
+print(dfs(0,1))
