@@ -1,0 +1,50 @@
+import sys
+from bisect import bisect_right # 이진탐색(오른쪽 삽입)
+input = sys.stdin.readline
+INF = int(1e9)
+
+def init() :
+    for i in range(n-1,0,-1) :
+        l, h = 0, 0
+        while l<len(tree[i<<1]) and h<len(tree[i<<1|1]) :
+            if tree[i<<1][l]<tree[i<<1|1][h] :
+                tree[i].append(tree[i<<1][l])
+                l += 1
+            else :
+                tree[i].append(tree[i<<1|1][h])
+                h += 1
+        tree[i] += tree[i<<1][l:]
+        tree[i] += tree[i<<1|1][h:]
+
+def query(l,r,idx) :
+    l += n
+    r += n
+    cnt = 0
+    while l<r :
+        if l%2 == 1 :
+            cnt += bisect_right(tree[l], idx)
+            l += 1
+        if r%2 == 1 :
+            cnt += bisect_right(tree[r-1], idx)
+            r -= 1
+        l//=2
+        r//=2
+    return cnt
+    
+n, q = map(int, input().split())
+nlist = list(map(int, input().split()))
+tree = [[] for _ in range(2*n)]
+for i in range(n,2*n) :
+    tree[i].append(nlist[i-n])
+init()
+for _ in range(q) :
+    a, b, c = map(int, input().split())
+    l = -INF
+    r = INF
+    while l<=r :
+        mid = (l+r)//2
+        if query(a-1,b,mid)<c :
+            l = mid+1
+        else :
+            r = mid-1
+    print(r+1)
