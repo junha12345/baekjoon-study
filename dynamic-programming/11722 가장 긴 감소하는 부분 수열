@@ -1,0 +1,12 @@
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+nlist = list(map(int, input().split()))
+dp = [0]*1001
+for i in nlist :
+    for j in range(i+1,1001) :
+        dp[i]=max(dp[i],dp[j]+1)
+    if dp[i]==0 :
+        dp[i] += 1
+print(max(dp))
