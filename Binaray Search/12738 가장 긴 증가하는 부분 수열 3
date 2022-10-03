@@ -1,0 +1,13 @@
+import sys
+from bisect import bisect_left
+input = sys.stdin.readline
+INF = int(2e9)
+
+n = int(input())
+nlist = list(map(int, input().split()))
+p = [-INF]+[INF]*n
+for x in nlist :
+    idx = bisect_left(p,x)
+    if x<p[idx] :
+        p[idx] = x
+print(bisect_left(p,INF-1)-1)
