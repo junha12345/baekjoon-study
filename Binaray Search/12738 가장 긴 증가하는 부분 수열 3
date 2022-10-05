@@ -5,9 +5,12 @@ INF = int(2e9)
 
 n = int(input())
 nlist = list(map(int, input().split()))
-p = [-INF]+[INF]*n
+p = [-INF]
 for x in nlist :
     idx = bisect_left(p,x)
-    if x<p[idx] :
-        p[idx] = x
-print(bisect_left(p,INF-1)-1)
+    if len(p)<idx+1 :
+        p.append(x)
+    else :
+        if x<p[idx] :
+            p[idx] = x
+print(len(p)-1)
