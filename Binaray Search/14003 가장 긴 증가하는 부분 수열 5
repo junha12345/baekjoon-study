@@ -1,0 +1,20 @@
+import sys
+from bisect import bisect_left
+input = sys.stdin.readline
+INF = int(2e9)
+
+n = int(input())
+nlist = list(map(int, input().split()))
+p = [-INF]
+ans = [[]for _ in range(n+1)]
+for x in nlist :
+    idx = bisect_left(p,x)
+    if len(p)<idx+1 :
+        p.append(x)
+        ans[idx] = ans[idx-1]+[x]
+    else :
+        if x<p[idx] :
+            ans[idx] = ans[idx-1]+[x]
+            p[idx] = x
+print(len(p)-1)
+print(*ans[len(p)-1])
