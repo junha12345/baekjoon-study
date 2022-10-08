@@ -1,45 +1,68 @@
 import sys
-from bisect import bisect_right # 이진탐색(오른쪽 삽입)
+from math import *
 input = sys.stdin.readline
+# sol = 쿼리를 다 저장하며 받은 후 좌표압축, 다시 쿼리를 이어나가며 세그트리 갱신
 
-def init() :
-    for i in range(q-1,0,-1) :
-        l, h = 0, 0
-        while l<len(tree[i<<1]) and h<len(tree[i<<1|1]) :
-            if tree[i<<1][l]<tree[i<<1|1][h] :
-                tree[i].append(tree[i<<1][l])
-                l += 1
-            else :
-                tree[i].append(tree[i<<1|1][h])
-                h += 1
-        tree[i] += tree[i<<1][l:]
-        tree[i] += tree[i<<1|1][h:]
+def update(k) :
+    k += n
+    tree[k] += 1
+    while k>1 :
+        k //= 2
+        tree[k] = tree[2*k] + tree[2*k+1]
+    
+def sol(l,r) :
+    l += n
+    r += n
+    cnt = 0
+    while l<r :
+        if l%2 == 1 :
+            cnt += tree[l]
+            l += 1
+        if r%2 == 1 :
+            cnt += tree[r-1]
+            r -= 1
+        l//=2
+        r//=2
+    return cnt
 
 q = int(input())
-n = 0
 idx = 1
-nlist = set()
-tree = [[] for _ in range(2*q)]
+nlist = set() # 값이 0일때 판단용
+query = []
+xlist = []
 for _ in range(q) :
     a, *b = map(int, input().split())
     if a == 1 :
-        x, y = b
+        x,y = b
+        if x != 0 :
+            xlist.append(ceil(-y/x))
+            if y%x==0 :
+                nlist.add(int(-y/x))
+    else :
+        xlist.append(b[0])
+    query.append([a,*b])
+xlist = sorted(set(xlist))
+xdict = {xlist[i]:i for i in range(len(xlist))}
+n = len(xdict)
+idx = 1
+tree = [0]*(2*n)
+for i in range(q) :
+    if len(query[i]) == 3 :
+        z,x,y = query[i]
         if x==0 : 
-            idx*=y
+            if y<0 : idx *= -1
+            elif y==0 : idx *= 0
             continue
         elif x<0 : idx *= -1
-        nlist.add(-y/x)
-        n += 1
-        tree[n-1+q].append(-y/x)
-        init()
+        update(xdict[ceil(-y/x)])
     else :
-        c = b[0]
-        if c in nlist : print(0)
+        z,x = query[i]
+        if x in nlist or idx == 0 : print("0")
         else :
-            cnt = len(tree[1])-bisect_right(tree[1], c)
+            if xdict[x] == n-1 : cnt = 0
+            else : cnt = sol(xdict[x]+1,n) #자기보다 큰거 개수
             if idx>0 and cnt%2==0 : print("+")
             elif idx>0 and cnt%2==1 : print("-")
             elif idx<0 and cnt%2==0 : print("-")
             elif idx<0 and cnt%2==1 : print("+")
-    print(tree)
-    print()
+            else : print("0")
