@@ -1,0 +1,39 @@
+import sys
+from collections import deque
+input= sys.stdin.readline
+
+def dfs(s) :
+    for node in graph[s] :
+        if visited[node]==0 :
+            visited[node] = 1
+            dans.append(node)
+            dfs(node)
+        
+def bfs(s) :
+    q = deque([v])
+    while q :
+        s = q.popleft()
+        for node in graph[s] :
+            if visited[node]==0 :
+                visited[node] = 1
+                bans.append(node)
+                q.append(node)
+                
+n, m, v = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(m) :
+    x,y = map(int, input().split())
+    graph[x].append(y)
+    graph[y].append(x)
+for i in range(1,n+1) :
+    graph[i].sort()
+dans = [v]
+bans = [v]
+visited = [0]*(n+1)
+visited[v] = 1
+dfs(v)
+visited = [0]*(n+1)
+visited[v] = 1
+bfs(v)
+print(*dans)
+print(*bans)
