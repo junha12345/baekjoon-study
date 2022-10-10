@@ -1,0 +1,19 @@
+def solution(info, edges):
+    n = len(info)
+    visited = [0]*n
+    visited[0] = 1
+    ans = []
+    def dfs(sh,wo) :
+        if wo>=sh :
+            return
+        else :
+            ans.append(sh)
+        for i in range(len(edges)) :
+            s,e = edges[i]
+            if visited[s]==1 and visited[e]==0 :
+                visited[e] = 1
+                if info[e]==0 : dfs(sh+1,wo)
+                else : dfs(sh,wo+1)
+                visited[e] = 0
+    dfs(1,0)
+    return max(ans)
