@@ -1,0 +1,28 @@
+def solution(a) :
+    def sol(x) : #스타수열 만들기
+        cnt = 0
+        pick = [0]*(len(a))
+        for i in range(len(a)) :
+            if a[i]==x and pick[i]==0 :
+                if i>0 and a[i-1]!=x and pick[i-1]==0 :
+                    pick[i-1]=1
+                    pick[i]=1
+                    cnt += 1
+                elif i<len(a)-1 and a[i+1]!=x and pick[i+1]==0 :
+                    pick[i+1]=1
+                    pick[i]=1
+                    cnt += 1
+        return cnt*2
+    
+    if len(a)<2 :
+        return 0
+    cnt = [0]*len(a)
+    for i in a :
+        cnt[i] += 1
+    ans = 0
+    visited = [0]*len(a)
+    for i in a :
+        if cnt[i]*2>ans and visited[i]==0 :
+            ans=max(sol(i),ans)
+            visited[i]=1
+    return ans
