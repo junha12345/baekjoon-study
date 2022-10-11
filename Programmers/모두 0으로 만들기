@@ -1,0 +1,35 @@
+from collections import deque
+def solution(x, edges):
+    n = len(x)
+    parent = [-1]*n
+    parent[0]=0
+    graph = [[]for _ in range(n)]
+    for a,b in edges :
+        graph[a].append(b)
+        graph[b].append(a)
+    dept=[[i,0] for i in range(n)]
+    # 0을 루트노드
+    def bfs(s,idx) :
+        q = deque([])
+        q.append([s,idx])
+        while q :
+            i,j = q.popleft()
+            for node in graph[i] :
+                if parent[node]==-1 :
+                    parent[node]=i
+                    q.append([node,j+1])
+                    dept[node][1]=j+1
+    bfs(0,0)
+    ans = 0
+    dept.sort(key=lambda x : x[1])
+    while dept :
+        idx,_ = dept.pop()
+        for node in graph[idx] :
+            if parent[idx]==node :
+                ans += abs(x[idx])
+                x[node]+=x[idx]
+                x[idx]=0
+    if sum(x)==0 :
+        return ans
+    else :
+        return -1
