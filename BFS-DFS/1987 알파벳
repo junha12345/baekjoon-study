@@ -1,0 +1,25 @@
+import sys
+from collections import deque
+input= sys.stdin.readline
+
+def dfs(a,b,cnt) :
+    global ans
+    check[ord(graph[b][a])-65]=1
+    for i in range(4) :
+        nx=a+dx[i]
+        ny=b+dy[i]
+        if 0<=nx<c and 0<=ny<r and check[ord(graph[ny][nx])-65]==0 :
+            ans = max(ans,cnt+1)
+            dfs(nx,ny,cnt+1)
+            check[ord(graph[ny][nx])-65]=0
+
+r, c = map(int, input().split()) #세,가
+ans=1
+graph=[]
+check = [0]*26
+for _ in range(r) :
+    graph.append(list(map(str, input().strip())))
+dx=[0,0,-1,1]
+dy=[-1,1,0,0]
+dfs(0,0,1)
+print(ans)
