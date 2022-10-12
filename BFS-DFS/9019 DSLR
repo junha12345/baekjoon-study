@@ -1,0 +1,32 @@
+import sys
+from collections import deque
+input= sys.stdin.readline
+
+def bfs(a,b) :
+    q = deque()
+    q.append([a,""])
+    while q :
+        n,ans=q.popleft()
+        if n == b:
+            return ans
+        num = (2*n)%10000
+        if visited[num] == 0 :
+            q.append([num,ans+"D"])
+            visited[num] = 1
+        num = n-1 if n!=0 else 9999
+        if visited[num] == 0 :
+            q.append([num,ans+"S"])
+            visited[num] = 1
+        num = 10*(n%1000) + n//1000
+        if visited[num] == 0 :
+            q.append([num,ans+"L"])
+            visited[num] = 1
+        num = 1000*(n%10) + n//10
+        if visited[num] == 0 :
+            q.append([num,ans+"R"])
+            visited[num] = 1
+
+for _ in range(int(input())) :
+    a,b = map(int, input().split())
+    visited = [0]*10000
+    print(bfs(a,b))
