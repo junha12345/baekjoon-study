@@ -1,0 +1,22 @@
+import sys
+from collections import deque
+input= sys.stdin.readline
+
+def dfs(nor,n,k,idx) :
+    num=0
+    while n>0 :
+        num+=(n%10)**k
+        n-=n%10
+        n//=10
+    if nor==num :
+        print(0)
+        return
+    if check[num]!=0 :
+        print(check[num])
+        return
+    check[num]=idx
+    dfs(nor,num,k,idx+1)
+
+a,b = map(int, input().split())
+check = [0]*6400000
+dfs(a,a,b,1)
