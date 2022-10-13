@@ -1,0 +1,35 @@
+import sys
+input= sys.stdin.readline
+
+def update(x,val) :
+    x+=n
+    tree[x]=val
+    while x>0 :
+        x//=2
+        tree[x]=tree[x<<1]+tree[x<<1|1]
+
+def query(l,r) :
+    l += n
+    r += n
+    ans=0
+    while l<r :
+        if l%2==1 :
+            ans += tree[l]
+            l += 1
+        if r%2==1 :
+            ans += tree[r-1]
+            r -= 1
+        l//=2
+        r//=2
+    return ans
+        
+n, m = map(int, input().split())
+tree=[0]*(2*n)
+for _ in range(m) :
+    q,x,y = map(int, input().split())
+    if q==0 :
+        num1=min(x,y)
+        num2=max(x,y)
+        print(query(num1-1,num2))
+    else :
+        update(x-1,y)
