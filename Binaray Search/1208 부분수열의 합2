@@ -1,0 +1,27 @@
+import sys
+from itertools import combinations
+from bisect import bisect_left, bisect_right
+sys.setrecursionlimit(10**5)
+input= sys.stdin.readline
+
+def sol(arr,num) :
+    return bisect_right(arr,num)-bisect_left(arr,num)
+
+def arr_sum(arr) :
+    s_arr=[]
+    for i in range(1,len(arr)+1) :
+        for x in combinations(arr,i) :
+            s_arr.append(sum(x))
+    return s_arr
+
+n, s = map(int, input().split())
+nlist=list(map(int, input().split()))
+left,right=nlist[:n//2],nlist[n//2:]
+l=sorted(arr_sum(left))
+r=sorted(arr_sum(right))
+ans = 0
+ans += sol(l,s)
+ans += sol(r,s)
+for i in l :
+    ans += sol(r,s-i)
+print(ans)
