@@ -1,0 +1,14 @@
+def solution(n, times):
+    ans=0
+    s,e=0,min(times)*n
+    while s<=e :
+        cnt=0
+        mid=(s+e)//2
+        for i in times :
+            cnt+=mid//i
+        if cnt>=n :
+            e=mid-1
+            ans=mid
+        else :
+            s=mid+1
+    return ans
