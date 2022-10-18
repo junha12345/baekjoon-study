@@ -1,0 +1,31 @@
+import sys
+input = sys.stdin.readline
+
+def find(x) :
+    if x==parent[x] :
+        return x
+    parent[x]=find(parent[x])
+    return parent[x]
+
+def union(x,y) :
+    x=find(x)
+    y=find(y)
+    if x==y : return
+    if rank[x]<rank[y] : x,y=y,x
+    parent[y]=x
+    if rank[x]==rank[y] : rank[x]+=1
+
+# 가격이 가장 낮은순으로 정렬 후 연결성을 확인
+v,e = map(int, input().split())
+graph=[]
+parent = [i for i in range(v+1)]
+rank = [1]*(v+1)
+for _ in range(e) :
+    graph.append(list(map(int, input().split())))
+graph.sort(key=lambda x:x[2])
+cnt=0
+for a,b,c in graph :
+    if find(a)!=find(b) :
+        union(a,b)
+        cnt+=c
+print(cnt)
