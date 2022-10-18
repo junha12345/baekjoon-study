@@ -1,0 +1,28 @@
+def solution(beginning, target):
+    n=len(beginning)
+    m=len(beginning[0])
+    ans = 101
+    for bit in range(1<<n) :
+        slist=[beginning[i][:] for i in range(n)]
+        cnt=0
+        for i in range(n) :
+            if bit&(1<<i) :
+                cnt+=1
+                for j in range(m) :
+                    if slist[i][j]==0 :
+                        slist[i][j]=1
+                    else :
+                        slist[i][j]=0
+        for i in range(m) :
+            if slist[0][i]!=target[0][i] :
+                cnt+=1
+                for j in range(n) :
+                    if slist[j][i]==0 :
+                        slist[j][i]=1
+                    else :
+                        slist[j][i]=0
+        if slist==target :
+            ans=min(ans,cnt)
+    if ans==101 :
+        return -1
+    return ans
