@@ -1,0 +1,25 @@
+import sys
+input = sys.stdin.readline
+INF = int(1e9)
+
+n = int(input())
+coin = [list(input().strip()) for _ in range(n)]
+ans = INF
+for bit in range(1 << n) :
+    slist = [coin[i] for i in range(n)]
+    for i in range(n) :
+        if bit&(1<<i) :
+            for j in range(n) :
+                if slist[i][j] == "H" :
+                    slist[i][j] = "T"
+                else :
+                    slist[i][j] = "H"
+    cnt = 0
+    for i in range(n) :
+        p = 0
+        for j in range(n) :
+            if slist[j][i]=="T" :
+                p += 1
+        cnt += min(p, n-p)
+    ans = min(ans, cnt)
+print(ans)
