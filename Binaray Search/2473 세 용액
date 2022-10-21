@@ -1,0 +1,25 @@
+import sys
+from bisect import bisect_right
+input = sys.stdin.readline
+INF = int(4e9)
+
+def sol(idx,x,y) :
+    global k,ans
+    if idx<n and k>abs(nlist[x]+nlist[y]+nlist[idx]) and idx != x and idx !=y :
+        ans=[nlist[x],nlist[y],nlist[idx]]
+        k=abs(nlist[x]+nlist[y]+nlist[idx])
+    if k>abs(nlist[x]+nlist[y]+nlist[idx-1]) and idx-1 != x and idx-1 != y :
+        ans=[nlist[x],nlist[y],nlist[idx-1]]
+        k=abs(nlist[x]+nlist[y]+nlist[idx-1])
+
+n = int(input())
+nlist = list(map(int, input().split()))
+nlist.sort()
+ans=[]
+k=INF
+for i in range(n) :
+    for j in range(i,n) :
+        if i!=j :
+            sol(bisect_right(nlist,-(nlist[i]+nlist[j])),i,j)
+ans.sort()
+print(*ans)
