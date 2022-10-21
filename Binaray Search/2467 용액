@@ -1,0 +1,25 @@
+import sys
+from bisect import bisect_right
+input = sys.stdin.readline
+INF = int(3e9)
+
+n = int(input())
+nlist = list(map(int, input().split()))
+nlist.sort()
+ans=[]
+k=INF
+for i in range(n) :
+    idx = bisect_right(nlist,-nlist[i])
+    if idx<n :
+        if k>abs(nlist[i]+nlist[idx-1]) and idx-1 != i:
+            ans=[nlist[i],nlist[idx-1]]
+            k=abs(nlist[i]+nlist[idx-1])
+        if k>abs(nlist[i]+nlist[idx]) and idx != i:
+            ans=[nlist[i],nlist[idx]]
+            k=abs(nlist[i]+nlist[idx])
+    else :
+        if k>abs(nlist[i]+nlist[idx-1]) and idx-1 != i:
+            ans=[nlist[i],nlist[idx-1]]
+            k=abs(nlist[i]+nlist[idx-1])
+ans.sort()
+print(*ans)
