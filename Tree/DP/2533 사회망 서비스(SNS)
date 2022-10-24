@@ -1,0 +1,23 @@
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+
+def dfs(s) : #x,o
+    visited[s]=1
+    for node in graph[s] :
+        if visited[node]==0 :
+            dfs(node)
+            dp[s][0]+=dp[node][1]
+            dp[s][1]+=min(dp[node][0],dp[node][1])
+    dp[s][1]+=1
+
+n = int(input())
+graph = [[] for _ in range(n+1)]
+for _ in range(n-1) :
+    a,b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+visited = [0]*(n+1)
+dp = [[0,0]for _ in range(n+1)] #dp[현재노드][0,0]
+dfs(1)
+print(min(dp[1]))
