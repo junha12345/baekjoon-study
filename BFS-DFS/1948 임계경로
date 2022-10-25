@@ -1,0 +1,34 @@
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**4)
+
+def dfs(s,t) :
+    for node,w in graph[s] :
+        if t+w>time[node] :
+            time[node]=t+w
+            dfs(node,t+w)
+            
+def bdfs(e,t) :
+    for node,w in bgraph[e] :
+        if t-w==time[node] and check[e][node]==0 :
+            check[e][node]=1
+            bdfs(node,t-w)
+            
+n = int(input())
+m = int(input())
+graph = [[] for _ in range(n+1)]
+bgraph= [[] for _ in range(n+1)]
+time=[0]*(n+1)
+check=[[0]*(n+1) for _ in range(n+1)]
+for _ in range(m) :
+    a,b,c = map(int, input().split())
+    graph[a].append([b,c])
+    bgraph[b].append([a,c])
+x,y = map(int, input().split())
+dfs(x,0)
+bdfs(y,time[y])
+ans=0
+for i in range(1,n+1) :
+    ans+=check[i].count(1)
+print(time[y])
+print(ans)
