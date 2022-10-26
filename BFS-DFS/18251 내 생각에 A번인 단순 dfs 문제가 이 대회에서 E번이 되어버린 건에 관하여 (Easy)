@@ -1,0 +1,32 @@
+import sys
+from math import *
+input = sys.stdin.readline
+sys.setrecursionlimit(10**4)
+# sol = 쿼리를 다 저장하며 받은 후 좌표압축, 다시 쿼리를 이어나가며 세그트리 갱신
+
+def dfs(idx,d) :
+    if idx*2<=n :
+        dfs(idx*2,d+1)
+    nlist.append([d,tree[idx-1]])
+    if idx*2+1<=n :
+        dfs(idx*2+1,d+1)
+
+n = int(input())
+h = int(log2(n+1))
+tree=list(map(int, input().split()))
+nlist=[]
+dfs(1,0)
+ans=nlist[0][1]
+for i in range(h) : #하
+    for j in range(i,h) : #상
+        cnt=0
+        for y,w in nlist :
+            if y<i or j<y :
+                continue
+            if cnt+w>=0 :
+                cnt+=w
+                ans = max(ans,cnt)
+            else :
+                ans = max(ans,w)
+                cnt=0
+print(ans)
