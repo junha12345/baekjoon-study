@@ -1,0 +1,36 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+def update(k,val) :
+    k+=size-1
+    if tree[k]+val>=0 :
+        tree[k]+=val
+    else :
+        tree[k]=0
+    while k>1 :
+        k//=2
+        tree[k]=tree[k<<1]+tree[k<<1|1]
+
+def sol(cnt) :
+    idx=1
+    while idx<size :
+        tree[idx]-=1
+        if tree[idx*2]>=cnt :
+            idx=idx*2
+        else :
+            cnt-=tree[idx*2]
+            idx=idx*2+1
+    tree[idx]-=1
+    return idx-size+1
+
+q = int(input())
+n = ceil(log2(1000000))
+size = 1<<n
+tree = [0]*(2*size)
+for _ in range(q) :
+    a, *b = map(int, input().split())
+    if a==2 :
+        update(b[0],b[1])
+    else :
+        print(sol(b[0]))
