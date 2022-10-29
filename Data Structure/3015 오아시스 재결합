@@ -1,0 +1,25 @@
+import sys
+from math import *
+input = sys.stdin.readline
+
+n = int(input())
+nlist = [int(input()) for _ in range(n)]
+stack = []
+ans=0
+for x in nlist :
+    while stack and stack[-1][0]<x :
+        ans+=stack.pop()[1]
+    if not stack :
+        stack.append([x,1])
+        continue
+    if stack[-1][0]==x :
+        val=stack.pop()[1]
+        ans+=val
+        if stack : ans+=1
+        stack.append([x,val+1])
+    else :
+        ans+=1
+        stack.append([x,1])  
+print(ans)
+# 4 3 1 2
+# 2 4 1 2 2 5 1
